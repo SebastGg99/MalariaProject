@@ -3,3 +3,6 @@
 
 # Ignorar carpeta de datos
 data/
+
+__pycache__/
+*.pyc
