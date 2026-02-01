@@ -1,20 +1,19 @@
 import numpy as np
 from typing import List, Tuple, Optional
-# =============================
-# Lattice model (SOS approximation)
-# =============================
+
 class LatticeSOS:
     """
-    Simple solid-on-solid (SOS) lattice with integer column heights.
+    Red simple Solid-On-Solid (SOS) con alturas de columna enteras.
     - heights[i, j] ∈ {0,1,2,...}
-    - 4-neighbor (von Neumann) connectivity with periodic BCs.
+    - Conectividad de 4 vecinos (von Neumann) con condiciones de contorno periódicas.
     """
-    def __init__(self, size: int, seed: Optional[int] = None):
+    def __init__(self, size: int, seed: Optional[int] = None, debug: bool = False):
         self.size = size # Tamaño de la red
         # Generador de nums aleatorios con semilla
         self.rng = np.random.default_rng(seed)
         # Corazón de la red, inicialmente plana
         self.heights = np.zeros((size, size), dtype=np.int32)
+        self.debug = debug
 
     # Configuración del estado inicial de la superficie
     def initialize(self, init_mode: str = "flat", max_roughness: int = 1):
@@ -47,11 +46,16 @@ class LatticeSOS:
 
     # Aumenta la altura de un sitio (simulando adsorción)
     def inc_height(self, site: Tuple[int,int], dh: int = 1):
+        if self.debug:
+            assert dh > 0, f"Intento de inc_height con valor no positivo: {dh}"
         self.heights[site] += int(dh)
 
     # Disminuye la altura de un sitio (simulando desorción)
     def dec_height(self, site: Tuple[int,int], dh: int = 1):
         h = int(self.heights[site])
+        if self.debug:
+            assert h >= dh, f"Error Crítico: Intento de altura negativa en {site}. h={h}, dh={dh}"
+
         if h >= dh:
             self.heights[site] = h - dh
 
@@ -112,8 +116,14 @@ class LatticeSOS:
             return []
         targets = []
         for n in self.neighbors4(site):
-            if self.get_height(n) <= h:  # no subir
+            h_n = self.get_height(n)
+            if h_n <= h:  # no subir
                 targets.append(n)
+            
+            # [PRUEBA 1]: Validez Física en Migración
+            if self.debug and h_n > h:
+                pass 
+
         return targets
 
     def get_sites(self) -> List[Tuple[int,int]]:

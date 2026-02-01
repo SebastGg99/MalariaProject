@@ -1,7 +1,5 @@
 from dataclasses import dataclass
-# =============================
-# Parameters
-# =============================
+
 @dataclass
 class KMCParams:
     T: float

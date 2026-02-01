@@ -11,10 +11,17 @@ from .utils import _safe_exp, _finite_or_zero
 class KMC_BKL:
     def __init__(self, lattice: LatticeSOS, params: KMCParams,
                  N_bulk0: int, rng_seed: Optional[int] = None,
-                 time_scale: float = 1.0, n_seeds: int = 0):
+                 time_scale: float = 1.0, n_seeds: int = 0, 
+                 debug: bool = False):
         self.lat = lattice
         self.p = params
+        
+        # [PRUEBA 4]: Garantía de Determinismo (Seed Check)
+        if debug and rng_seed is None:
+            raise ValueError("⛔ [DEBUG ERROR] Se requiere una semilla fija (rng_seed) para garantizar determinismo en modo debug.")
+
         self.rng = np.random.default_rng(rng_seed)
+        self.debug = debug
 
         # Reservas
         self.N0 = int(N_bulk0)   # total inicial para escalar adsorción y conversión
@@ -146,8 +153,47 @@ class KMC_BKL:
         idx = self.rng.integers(0, len(sites))
         return sites[idx]
 
+    # Método interno de validación exhaustiva
+    def _validate_integrity(self, context_msg: str = ""):
+        """
+        Verifica la consistencia interna del estado del KMC.
+        Lanza AssertionError si algo está roto.
+        """
+        # [PRUEBA 3]: Sanidad de Tasas (Rate Sanity) exhaustive check
+        for i in range(5):
+            rates = [self.r_a(i), self.r_d(i), self.r_inc(i)]
+            if i < 4: rates.append(self.r_m(i))
+            
+            if any(not np.isfinite(r) or r < 0 for r in rates):
+                raise AssertionError(f"⛔ [RATE ERROR] Tasa inválida detectada para {i} vecinos: {rates}")
+
+        # 1. Verificar tasas finitas
+        if not np.isfinite(self.r_a(0)): raise AssertionError(f"Tasa r_a infinita o NaN. {context_msg}")
+        
+        # 2. Verificar consistencia de clasificación de sitios
+        total_pixels = self.lat.size * self.lat.size
+        
+        # Check Adsorption bins
+        A_bins = self._classify_adsorption_sites()
+        count_A = sum(len(lst) for lst in A_bins.values())
+        assert count_A == total_pixels, f"Error en _classify_adsorption_sites: {count_A} != {total_pixels} ({context_msg})"
+
+        # [PRUEBA 2]: Consistencia de Contenedores (Binning Integrity)
+        # Check Desorption bins (vacios + ocupados = total)
+        D_bins = self._classify_desorption_sites()
+        count_D = sum(len(lst) for lst in D_bins.values())
+        empty_sites = len([s for s in self.lat.get_sites() if self.lat.get_height(s) == 0])
+        
+        if count_D + empty_sites != total_pixels:
+             raise AssertionError(f"⛔ [BIN ERROR] Pérdida de sitios en desorción: {count_D} ocupados + {empty_sites} vacíos != {total_pixels}")
+
+        print(f"✅ [DEBUG {self.t:.4f}] Integridad verificada: {context_msg}")
+
     # ---- One kMC step (con defensas) ----
     def step(self) -> bool:
+        if self.debug:
+            self._validate_integrity("Pre-Step")
+
         A_bins = self._classify_adsorption_sites()
         D_bins = self._classify_desorption_sites()
         M_bins = self._classify_migration_sites()
@@ -162,7 +208,24 @@ class KMC_BKL:
         Wa = _finite_or_zero(Wa); Wd = _finite_or_zero(Wd)
         Wm = _finite_or_zero(Wm); Wi = _finite_or_zero(Wi)
         Wtot = Wa + Wd + Wm + Wi
+        
+        # [PRUEBA 5]: Balance Detallado Instantáneo (Thermo Check)
+        if self.debug:
+            S = self.supersaturation
+            # Si estamos muy cerca del equilibrio (S ~ 0)
+            if abs(S) < 0.05 and (Wa > 1e-20 or Wd > 1e-20):
+                # Las tasas globales de adsorción y desorción deberían ser comparables.
+                log_wa = np.log10(Wa + 1e-100)
+                log_wd = np.log10(Wd + 1e-100)
+                if abs(log_wa - log_wd) > 2.0: # Más de 2 órdenes de magnitud de diferencia
+                    print(f"⚠️ [THERMO WARNING] Posible violación de balance detallado a S={S:.4f}. Wa={Wa:.2e}, Wd={Wd:.2e}")
+
+        if self.debug:
+             assert Wtot >= 0, "Error físico: La tasa total Wtot es negativa."
+
         if not np.isfinite(Wtot) or Wtot <= 0.0:
+            if self.debug:
+                print(f"⚠️ Wtot inválido o cero: {Wtot}. Deteniendo simulación.")
             return False
 
         # tiempo
@@ -174,6 +237,10 @@ class KMC_BKL:
 
         # evento
         etype = self._choose_event_type(Wa, Wd, Wm, Wi)
+        
+        if self.debug and etype == "none":
+             print("⚠️ Evento seleccionado 'none' a pesar de Wtot > 0")
+
         if etype == "none":
             return False
 
@@ -234,9 +301,13 @@ class KMC_BKL:
         n_events = 0
         try:
             while self.t < t_end and n_events < max_events:
-                print(self.t)
+                # debug print
+                if self.debug and n_events % 100 == 0:
+                     print(f"⏱️ t={self.t:.4e} | Events={n_events} | Conv={self.conversion_percent:.1f}%")
+
                 progressed = self.step()
                 if not progressed:
+                    if self.debug: print("⏹️ Simulación detenida: step() devolvió False.")
                     break
                 n_events += 1
                 # guardar snapshots programados
