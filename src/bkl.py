@@ -1,9 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from typing import Dict, List, Tuple, Optional
-from .params import KMCParams
-from .lattice import LatticeSOS
-from .utils import _safe_exp, _finite_or_zero
+from params import KMCParams
+from lattice import LatticeSOS
+from utils import _safe_exp, _finite_or_zero
 
 # =============================
 # Adaptive BKL kMC with incorporation (robusto)
@@ -114,7 +114,6 @@ class KMC_BKL:
         return bins
 
     def _classify_incorporation_sites(self) -> Dict[int, List[Tuple[int,int]]]:
-        # aquí usamos mismos sitios ocupados; i>0 favorece incorporación
         bins = {0: [], 1: [], 2: [], 3: [], 4: []}
         for s in self.lat.get_sites():
             if self.lat.get_height(s) > 0:
@@ -138,7 +137,6 @@ class KMC_BKL:
     def _choose_class(self, weights: Dict[int, float]) -> int:
         total = sum(weights.values())
         if not np.isfinite(total) or total <= 0.0:
-            # fallback: tomar la clase con mayor peso válido
             return max(weights, key=weights.get)
         r = self.rng.random() * total
         cum = 0.0
@@ -155,10 +153,6 @@ class KMC_BKL:
 
     # Método interno de validación exhaustiva
     def _validate_integrity(self, context_msg: str = ""):
-        """
-        Verifica la consistencia interna del estado del KMC.
-        Lanza AssertionError si algo está roto.
-        """
         # [PRUEBA 3]: Sanidad de Tasas (Rate Sanity) exhaustive check
         for i in range(5):
             rates = [self.r_a(i), self.r_d(i), self.r_inc(i)]
@@ -167,19 +161,15 @@ class KMC_BKL:
             if any(not np.isfinite(r) or r < 0 for r in rates):
                 raise AssertionError(f"⛔ [RATE ERROR] Tasa inválida detectada para {i} vecinos: {rates}")
 
-        # 1. Verificar tasas finitas
         if not np.isfinite(self.r_a(0)): raise AssertionError(f"Tasa r_a infinita o NaN. {context_msg}")
         
-        # 2. Verificar consistencia de clasificación de sitios
-        total_pixels = self.lat.size * self.lat.size
+        total_pixels = self.lat.size[0] * self.lat.size[1]
         
-        # Check Adsorption bins
         A_bins = self._classify_adsorption_sites()
         count_A = sum(len(lst) for lst in A_bins.values())
         assert count_A == total_pixels, f"Error en _classify_adsorption_sites: {count_A} != {total_pixels} ({context_msg})"
 
         # [PRUEBA 2]: Consistencia de Contenedores (Binning Integrity)
-        # Check Desorption bins (vacios + ocupados = total)
         D_bins = self._classify_desorption_sites()
         count_D = sum(len(lst) for lst in D_bins.values())
         empty_sites = len([s for s in self.lat.get_sites() if self.lat.get_height(s) == 0])
@@ -212,12 +202,10 @@ class KMC_BKL:
         # [PRUEBA 5]: Balance Detallado Instantáneo (Thermo Check)
         if self.debug:
             S = self.supersaturation
-            # Si estamos muy cerca del equilibrio (S ~ 0)
             if abs(S) < 0.05 and (Wa > 1e-20 or Wd > 1e-20):
-                # Las tasas globales de adsorción y desorción deberían ser comparables.
                 log_wa = np.log10(Wa + 1e-100)
                 log_wd = np.log10(Wd + 1e-100)
-                if abs(log_wa - log_wd) > 2.0: # Más de 2 órdenes de magnitud de diferencia
+                if abs(log_wa - log_wd) > 2.0:
                     print(f"⚠️ [THERMO WARNING] Posible violación de balance detallado a S={S:.4f}. Wa={Wa:.2e}, Wd={Wd:.2e}")
 
         if self.debug:
@@ -256,7 +244,6 @@ class KMC_BKL:
             weights = {i: (len(D_bins[i]) * self.r_d(i)) for i in D_bins if len(D_bins[i]) > 0}
             if not weights: return True
             i_sel = self._choose_class(weights); site = self._choose_site_uniform(D_bins[i_sel])
-            # sólo si hay GU en la columna
             if self.lat.get_height(site) > 0:
                 self.lat.dec_height(site, 1)
                 self.N_bulk += 1
@@ -276,8 +263,6 @@ class KMC_BKL:
             weights = {i: (len(I_bins[i]) * self.r_inc(i)) for i in I_bins if len(I_bins[i]) > 0}
             if not weights: return True
             i_sel = self._choose_class(weights); site = self._choose_site_uniform(I_bins[i_sel])
-            # En este esquema "incorporation" cuenta conversión explícitamente en N_inc
-            # (la altura ya se manipula en ads/des/mig; aquí sólo contabilizamos el progreso)
             self.N_inc += 1
 
         self.counts[etype] += 1
@@ -288,7 +273,6 @@ class KMC_BKL:
     def run(self, t_end: float, snapshot_times: Optional[List[float]] = None, max_events: int = 2_000_000):
         snaps: List[Tuple[float, np.ndarray, float]] = []
 
-        # normalizar snapshot_times
         if snapshot_times is None:
             times_list: List[float] = []
         elif isinstance(snapshot_times, np.ndarray):
@@ -301,7 +285,6 @@ class KMC_BKL:
         n_events = 0
         try:
             while self.t < t_end and n_events < max_events:
-                # debug print
                 if self.debug and n_events % 100 == 0:
                      print(f"⏱️ t={self.t:.4e} | Events={n_events} | Conv={self.conversion_percent:.1f}%")
 
@@ -310,17 +293,15 @@ class KMC_BKL:
                     if self.debug: print("⏹️ Simulación detenida: step() devolvió False.")
                     break
                 n_events += 1
-                # guardar snapshots programados
+                
                 while next_snap_idx < len(times_list) and self.t >= times_list[next_snap_idx]:
                     snaps.append((times_list[next_snap_idx],
                                   self.lat.heights.copy(),
                                   self.conversion_percent))
                     next_snap_idx += 1
         except Exception as e:
-            # Cierre limpio en caso de overflow/NaN u otros
             print(f"⚠️ Simulación detenida por excepción: {e}. Guardando estado parcial...")
 
-        # rellenar pendientes con el último estado conocido
         while next_snap_idx < len(times_list):
             snaps.append((times_list[next_snap_idx],
                           self.lat.heights.copy(),

@@ -7,12 +7,12 @@ class LatticeSOS:
     - heights[i, j] ∈ {0,1,2,...}
     - Conectividad de 4 vecinos (von Neumann) con condiciones de contorno periódicas.
     """
-    def __init__(self, size: int, seed: Optional[int] = None, debug: bool = False):
+    def __init__(self, size: List[int], seed: Optional[int] = None, debug: bool = False):
         self.size = size # Tamaño de la red
         # Generador de nums aleatorios con semilla
         self.rng = np.random.default_rng(seed)
         # Corazón de la red, inicialmente plana
-        self.heights = np.zeros((size, size), dtype=np.int32)
+        self.heights = np.zeros((size[0], size[1]), dtype=np.int32)
         self.debug = debug
 
     # Configuración del estado inicial de la superficie
@@ -28,8 +28,9 @@ class LatticeSOS:
             raise ValueError("Unknown init_mode")
 
     # Condiciones de contorno periódicas
+    # Revisar el índice para envolverlo dentro de los límites de la red
     def wrap(self, idx: int) -> int:
-        n = self.size
+        n = self.size[0] if isinstance(idx, int) else self.size[1]
         return (idx + n) % n
 
     # Coordenadas de los cuatro vecinos (Von Neumman) de un sitio
