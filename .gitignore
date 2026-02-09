@@ -1,5 +1,5 @@
-#Ignorar gitignore global
-.venv/
+#Ignorar entorno virtual de Python
+venv/
 
 # Ignorar carpeta de configuración de GitHub y acciones
 .github/
