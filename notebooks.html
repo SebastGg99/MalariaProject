@@ -1,0 +1,149 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="es" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>notebooks - Guia de experimentos reproducibles &mdash; documentación de MalariaProject - Crystal Growth with kMC method - 0.1.0</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=ba61de6b"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/translations.js?v=f85f4cfb"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Búsqueda" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            MalariaProject - Crystal Growth with kMC method
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Buscar documentos" aria-label="Buscar documentos" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">notebooks - Guia de experimentos reproducibles</a><ul>
+<li><a class="reference internal" href="#inventario-de-notebooks">Inventario de notebooks</a></li>
+<li><a class="reference internal" href="#archivos-auxiliares">Archivos auxiliares</a></li>
+<li><a class="reference internal" href="#orden-sugerido-de-ejecucion">Orden sugerido de ejecucion</a></li>
+<li><a class="reference internal" href="#buenas-practicas">Buenas practicas</a></li>
+<li><a class="reference internal" href="#notas-para-sphinx">Notas para Sphinx</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MalariaProject - Crystal Growth with kMC method</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">notebooks - Guia de experimentos reproducibles</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/notebooks.md.txt" rel="nofollow"> Ver código fuente de la página</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="notebooks-guia-de-experimentos-reproducibles">
+<h1>notebooks - Guia de experimentos reproducibles<a class="headerlink" href="#notebooks-guia-de-experimentos-reproducibles" title="Link to this heading"></a></h1>
+<p>Este directorio contiene notebooks de exploracion, calibracion y reproduccion de resultados del modelo kMC.</p>
+<section id="inventario-de-notebooks">
+<h2>Inventario de notebooks<a class="headerlink" href="#inventario-de-notebooks" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Malaria002D_v1.ipynb</span></code>: experimentos del modelo base 2D.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">paper_kMC.ipynb</span></code>: reproduccion y analisis de la variante del paper.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">experiments_1.ipynb</span></code> a <code class="docutils literal notranslate"><span class="pre">experiments_4.ipynb</span></code>: baterias de pruebas y sensibilidad de parametros.</p></li>
+</ul>
+</section>
+<section id="archivos-auxiliares">
+<h2>Archivos auxiliares<a class="headerlink" href="#archivos-auxiliares" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">beta-hematina.txt</span></code>: datos de referencia usados en algunas comparaciones.</p></li>
+</ul>
+</section>
+<section id="orden-sugerido-de-ejecucion">
+<h2>Orden sugerido de ejecucion<a class="headerlink" href="#orden-sugerido-de-ejecucion" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>Cargar entorno y dependencias del proyecto.</p></li>
+<li><p>Ejecutar celdas de import y configuracion de ruta.</p></li>
+<li><p>Ejecutar bloques de inicializacion de parametros y red.</p></li>
+<li><p>Correr simulaciones por bloques de tiempo.</p></li>
+<li><p>Generar graficas de crecimiento y probabilidad de sitio.</p></li>
+</ol>
+</section>
+<section id="buenas-practicas">
+<h2>Buenas practicas<a class="headerlink" href="#buenas-practicas" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Fijar semillas cuando se requiera reproducibilidad.</p></li>
+<li><p>Evitar mezclar resultados de experimentos con parametros distintos en una misma sesion.</p></li>
+<li><p>Exportar figuras finales a <code class="docutils literal notranslate"><span class="pre">results/</span></code> con nombres descriptivos.</p></li>
+</ul>
+</section>
+<section id="notas-para-sphinx">
+<h2>Notas para Sphinx<a class="headerlink" href="#notas-para-sphinx" title="Link to this heading"></a></h2>
+<p>Este README puede incluirse en la documentacion de uso para explicar el flujo experimental sin duplicar contenido.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Derechos de autor 2026, Sebastian Gaviria Giraldo - Hernan Salinas - German Torres.</p>
+  </div>
+
+  Compilado con <a href="https://www.sphinx-doc.org/">Sphinx</a> usando un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a>
+    proporcionado por <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

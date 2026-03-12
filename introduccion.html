@@ -1,0 +1,287 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="es" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MalariaProject &mdash; documentación de MalariaProject - Crystal Growth with kMC method - 0.1.0</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=ba61de6b"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/translations.js?v=f85f4cfb"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Búsqueda" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            MalariaProject - Crystal Growth with kMC method
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Buscar documentos" aria-label="Buscar documentos" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">MalariaProject</a><ul>
+<li><a class="reference internal" href="#descripcion-general">Descripción General</a></li>
+<li><a class="reference internal" href="#estructura-del-codigo-fuente-src">Estructura del Código Fuente (<code class="docutils literal notranslate"><span class="pre">src/</span></code>)</a><ul>
+<li><a class="reference internal" href="#lattice-py-topologia-y-estado-de-la-superficie">1. <code class="docutils literal notranslate"><span class="pre">lattice.py</span></code>: Topología y Estado de la Superficie</a></li>
+<li><a class="reference internal" href="#params-py-parametros-fisicoquimicos">2. <code class="docutils literal notranslate"><span class="pre">params.py</span></code>: Parámetros Fisicoquímicos</a></li>
+<li><a class="reference internal" href="#bkl-py-motor-de-simulacion-algoritmo-bkl">3. <code class="docutils literal notranslate"><span class="pre">bkl.py</span></code>: Motor de Simulación (Algoritmo BKL)</a></li>
+<li><a class="reference internal" href="#utils-py-estabilidad-numerica">4. <code class="docutils literal notranslate"><span class="pre">utils.py</span></code>: Estabilidad Numérica</a></li>
+<li><a class="reference internal" href="#sistema-de-auditoria-y-modo-debug-debug-true">5. Sistema de Auditoría y Modo Debug (<code class="docutils literal notranslate"><span class="pre">debug=True</span></code>)</a><ul>
+<li><a class="reference internal" href="#a-validez-fisica-physical-sanity">A. Validez Física (Physical Sanity)</a></li>
+<li><a class="reference internal" href="#b-integridad-de-contenedores-binning-integrity">B. Integridad de Contenedores (Binning Integrity)</a></li>
+<li><a class="reference internal" href="#c-sanidad-de-tasas-rate-sanity">C. Sanidad de Tasas (Rate Sanity)</a></li>
+<li><a class="reference internal" href="#d-garantia-de-determinismo">D. Garantía de Determinismo</a></li>
+<li><a class="reference internal" href="#e-chequeo-termodinamico-detailed-balance-check">E. Chequeo Termodinámico (Detailed Balance Check)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#flujo-de-ejecucion">Flujo de Ejecución</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MalariaProject - Crystal Growth with kMC method</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">MalariaProject</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/introduccion.md.txt" rel="nofollow"> Ver código fuente de la página</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="malariaproject">
+<h1>MalariaProject<a class="headerlink" href="#malariaproject" title="Link to this heading"></a></h1>
+<section id="descripcion-general">
+<h2>Descripción General<a class="headerlink" href="#descripcion-general" title="Link to this heading"></a></h2>
+<p>Este repositorio contiene una implementación robusta de una simulación <strong>Kinetic Monte Carlo (kMC)</strong> aplicada al estudio de la cinética de crecimiento de cristales de Hemozoína. El software modela la superficie del cristal utilizando una aproximación <strong>Solid-On-Solid (SOS)</strong> sobre una red cuadrada con condiciones de contorno periódicas.</p>
+<p>El núcleo de la simulación utiliza el <strong>algoritmo BKL (Bortz-Kalos-Lebowitz)</strong>, también conocido como «n-fold way» o algoritmo libre de rechazo, para garantizar una evolución temporal eficiente y exacta del sistema estocástico.</p>
+</section>
+<section id="estructura-del-codigo-fuente-src">
+<h2>Estructura del Código Fuente (<code class="docutils literal notranslate"><span class="pre">src/</span></code>)<a class="headerlink" href="#estructura-del-codigo-fuente-src" title="Link to this heading"></a></h2>
+<p>El código está estructurado de manera modular para separar la física del sistema, la topología de la red y la lógica del algoritmo estocástico.</p>
+<section id="lattice-py-topologia-y-estado-de-la-superficie">
+<h3>1. <code class="docutils literal notranslate"><span class="pre">lattice.py</span></code>: Topología y Estado de la Superficie<a class="headerlink" href="#lattice-py-topologia-y-estado-de-la-superficie" title="Link to this heading"></a></h3>
+<p>Contiene la clase <a class="reference internal" href="#src/lattice.py#L4"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">LatticeSOS</span></code></span></a>. Esta clase gestiona el estado geométrico del cristal representando la superficie como una matriz de alturas enteras bajo el modelo <strong>Solid-On-Solid (SOS)</strong>.</p>
+<p><strong>Inicialización:</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#src/lattice.py#L10"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">__init__(size,</span> <span class="pre">seed,</span> <span class="pre">debug)</span></code></span></a>: Constructor que crea una red cuadrada vacía de tamaño <code class="docutils literal notranslate"><span class="pre">size</span></code> y establece el generador de números aleatorios.</p></li>
+<li><p><a class="reference internal" href="#src/lattice.py#L19"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">initialize(init_mode,</span> <span class="pre">max_roughness)</span></code></span></a>: Configura la topografía inicial de la superficie (plana o rugosa aleatoria).</p></li>
+</ul>
+<p><strong>Topología:</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#src/lattice.py#L31"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">wrap(idx)</span></code></span></a>: Aplica condiciones de contorno periódicas para asegurar la continuidad de la red en los bordes.</p></li>
+<li><p><a class="reference internal" href="#src/lattice.py#L36"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">neighbors4(site)</span></code></span></a>: Retorna las coordenadas de los 4 vecinos más cercanos (vecindad de von Neumann) respetando las condiciones periódicas.</p></li>
+<li><p><a class="reference internal" href="#src/lattice.py#L129"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">get_sites()</span></code></span></a>: Devuelve una lista con las coordenadas de todos los sitios de la red.</p></li>
+</ul>
+<p><strong>Manipulación de Estado:</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#src/lattice.py#L44"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">get_height(site)</span></code></span></a>: Retorna la altura actual de una columna.</p></li>
+<li><p><a class="reference internal" href="#src/lattice.py#L47"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">inc_height(site,</span> <span class="pre">dh)</span></code></span></a>: Incrementa la altura de un sitio, simulando un evento de deposición o adsorción.</p></li>
+<li><p><a class="reference internal" href="#src/lattice.py#L53"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">dec_height(site,</span> <span class="pre">dh)</span></code></span></a>: Decrementa la altura de un sitio, simulando un evento de desorción. Incluye validaciones para evitar alturas negativas.</p></li>
+</ul>
+<p><strong>Cálculo de Enlaces y Coordinación:</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#src/lattice.py#L62"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">lateral_neighbors_at_level(site,</span> <span class="pre">level)</span></code></span></a>: Método auxiliar que cuenta cuántos vecinos alcanzan al menos cierta altura <code class="docutils literal notranslate"><span class="pre">level</span></code>. Usado para calcular energías.</p></li>
+<li><p><a class="reference internal" href="#src/lattice.py#L76"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">adsorption_bonds(site)</span></code></span></a>: Calcula cuántos vecinos laterales tendría una partícula si se adsorbiera en el sitio. Determina la estabilidad de llegada.</p></li>
+<li><p><a class="reference internal" href="#src/lattice.py#L89"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">desorption_bonds(site)</span></code></span></a>: Calcula cuántos vecinos laterales vinculan a la partícula en el tope de la columna. Determina la barrera energética para la desorción.</p></li>
+<li><p><a class="reference internal" href="#src/lattice.py#L105"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">migration_targets(site)</span></code></span></a>: Identifica a qué sitios vecinos puede moverse una partícula (donde la altura destino $\le$ altura origen), gobernando la difusión superficial.</p></li>
+</ul>
+</section>
+<section id="params-py-parametros-fisicoquimicos">
+<h3>2. <code class="docutils literal notranslate"><span class="pre">params.py</span></code>: Parámetros Fisicoquímicos<a class="headerlink" href="#params-py-parametros-fisicoquimicos" title="Link to this heading"></a></h3>
+<p>Define la <code class="docutils literal notranslate"><span class="pre">dataclass</span></code> <a class="reference internal" href="#src/params.py#L4"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">KMCParams</span></code></span></a>, que actúa como contenedor inmutable para los parámetros de la simulación. Su diseño facilita la configuración centralizada de la física del experimento.</p>
+<p><strong>Parámetros Termodinámicos y Ambientales:</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#src/params.py#L5"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">T</span></code></span></a>: Temperatura absoluta del sistema.</p></li>
+<li><p><a class="reference internal" href="#src/params.py#L12"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">V</span></code></span></a>: Volumen de la solución circundante. Fundamental para la variación dinámica de la concentración.</p></li>
+<li><p><a class="reference internal" href="#src/params.py#L13"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">C_eq</span></code></span></a>: Concentración de equilibrio del soluto. Base para el cálculo de la supersaturación ($S$).</p></li>
+</ul>
+<p><strong>Parámetros Cinéticos (Arrhenius):</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#src/params.py#L6"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">K0_plus</span></code></span></a>: Factor pre-exponencial cinético base para eventos reversibles (adsorción, desorción, migración).</p></li>
+<li><p><a class="reference internal" href="#src/params.py#L7"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">K_inc_plus</span></code></span></a>: Factor pre-exponencial específico para el evento de incorporación irreversible.</p></li>
+<li><p><a class="reference internal" href="#src/params.py#L8"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">E_pb_over_kT</span></code></span></a>: Energía por enlace lateral (partícula-partícula) normalizada por $k_B T$. Controla la cooperatividad.</p></li>
+<li><p><a class="reference internal" href="#src/params.py#L9"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">phi_over_kT</span></code></span></a>: Energía de activación de difusión base (potencial de superficie) normalizada por $k_B T$.</p></li>
+<li><p><a class="reference internal" href="#src/params.py#L10"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">delta</span></code></span></a>: Parámetro de ajuste que modula la dependencia de la tasa de adsorción respecto a la supersaturación.</p></li>
+</ul>
+<p><strong>Límites de Seguridad Numérica:</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#src/params.py#L14"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">S_floor</span></code></span></a>: Límite inferior (suelo) para la supersaturación, evitando inestabilidades en regímenes de disolución rápida.</p></li>
+<li><p><a class="reference internal" href="#src/params.py#L15"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">S_ceil</span></code></span></a>: Límite superior (techo) para la supersaturación, previniendo tasas de adsorción numéricamente explosivas.</p></li>
+</ul>
+</section>
+<section id="bkl-py-motor-de-simulacion-algoritmo-bkl">
+<h3>3. <code class="docutils literal notranslate"><span class="pre">bkl.py</span></code>: Motor de Simulación (Algoritmo BKL)<a class="headerlink" href="#bkl-py-motor-de-simulacion-algoritmo-bkl" title="Link to this heading"></a></h3>
+<p>Contiene la clase <a class="reference internal" href="#src/bkl.py#L11"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">KMC_BKL</span></code></span></a>, que orquesta la evolución temporal del sistema.</p>
+<p><strong>Configuración y Estado:</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#src/bkl.py#L12"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">__init__(lattice,</span> <span class="pre">params,</span> <span class="pre">N_bulk0,</span> <span class="pre">...)</span></code></span></a>: Inicializa la simulación inyectando la red, los parámetros físicos y la cantidad de soluto inicial. Configura las semillas del cristal si es necesario.</p></li>
+<li><p><a class="reference internal" href="#src/bkl.py#L48"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">supersaturación</span></code></span></a>: Propiedad que calcula dinámicamente la fuerza impulsora termodinámica ($S$) basada en la concentración actual de soluto.</p></li>
+<li><p><a class="reference internal" href="#src/bkl.py#L55"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">conversion_percent</span></code></span></a>: Propiedad que monitorea el progreso de la cristalización (porcentaje de soluto convertido en cristal).</p></li>
+</ul>
+<p><strong>Cálculo de Tasas (Rates):</strong>
+Implementación de las ecuaciones de Arrhenius para cada proceso elemental:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#src/bkl.py#L63"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">r_a(i)</span></code></span></a>: Tasa de <strong>Adsorción</strong>. Depende de $S$ y se ajusta por la depleción del soluto en el “bulk”.</p></li>
+<li><p><a class="reference internal" href="#src/bkl.py#L75"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">r_d(i)</span></code></span></a>: Tasa de <strong>Desorción</strong>. Depende fuertemente del número de vecinos laterales <code class="docutils literal notranslate"><span class="pre">i</span></code>.</p></li>
+<li><p><a class="reference internal" href="#src/bkl.py#L80"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">r_m(i)</span></code></span></a>: Tasa de <strong>Migración</strong>. Difusión superficial térmica.</p></li>
+<li><p><a class="reference internal" href="#src/bkl.py#L85"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">r_inc(i)</span></code></span></a>: Tasa de <strong>Incorporación</strong>. Evento de crecimiento irreversible.</p></li>
+</ul>
+<p><strong>Algoritmo BKL (Clasificación y Selección):</strong>
+El corazón del método «rejection-free» o n-fold way:</p>
+<ul class="simple">
+<li><p><strong>Clasificadores</strong>: Agrupan los sitios de la red según su entorno local para evitar recalcular tasas idénticas.</p>
+<ul>
+<li><p><a class="reference internal" href="#src/bkl.py#L91"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">_classify_adsorption_sites()</span></code></span></a>: Clasifica todos los sitios donde puede ocurrir adsorción.</p></li>
+<li><p><a class="reference internal" href="#src/bkl.py#L98"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">_classify_desorption_sites()</span></code></span></a>: Clasifica sitios ocupados susceptibles a desorber.</p></li>
+<li><p><a class="reference internal" href="#src/bkl.py#L106"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">_classify_migration_sites()</span></code></span></a>: Clasifica sitios móviles que tienen destinos válidos.</p></li>
+<li><p><a class="reference internal" href="#src/bkl.py#L117"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">_classify_incorporation_sites()</span></code></span></a>: Clasifica sitios candidatos para incorporación permanente.</p></li>
+</ul>
+</li>
+<li><p><strong>Selectores Monte Carlo</strong>:</p>
+<ul>
+<li><p><a class="reference internal" href="#src/bkl.py#L127"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">_choose_event_type(...)</span></code></span></a>: Elige qué tipo de evento físico ocurre (ads/des/mig/inc) proporcional a sus tasas totales $W$.</p></li>
+<li><p><a class="reference internal" href="#src/bkl.py#L139"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">_choose_class(weights)</span></code></span></a>: Elige la clase de coordinación específica dentro del evento seleccionado.</p></li>
+<li><p><a class="reference internal" href="#src/bkl.py#L153"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">_choose_site_uniform(sites)</span></code></span></a>: Elige al azar un sitio específico dentro de la clase ganadora.</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>Ejecución y Control:</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#src/bkl.py#L189"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">step()</span></code></span></a>: Ejecuta un único paso de Monte Carlo: calcula tasas totales, avanza el tiempo estocásticamente, selecciona y ejecuta el evento, y actualiza la red. Incluye verificaciones de integridad si <code class="docutils literal notranslate"><span class="pre">debug=True</span></code>.</p></li>
+<li><p><a class="reference internal" href="#src/bkl.py#L292"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">run(t_end,</span> <span class="pre">snapshot_times,</span> <span class="pre">max_events)</span></code></span></a>: Bucle principal que itera llamadas a <code class="docutils literal notranslate"><span class="pre">step()</span></code> hasta cumplir la condición de parada. Gestiona la grabación de «snapshots» del estado del sistema en tiempos específicos.</p></li>
+<li><p><a class="reference internal" href="#src/bkl.py#L158"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">_validate_integrity()</span></code></span></a>: (Modo Debug) Auditoría exhaustiva que verifica consistencia matemática y física (sin tasas negativas, conservación de sitios, termodinámica).</p></li>
+</ul>
+<p><strong>Visualización:</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#src/bkl.py#L327"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">plot_crystal_3d(...)</span></code></span></a>: Genera visualizaciones 3D del cristal utilizando <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code>. Soporta modo superficie continua (<code class="docutils literal notranslate"><span class="pre">mode=&quot;surface&quot;</span></code>) o visualización de voxeles (<code class="docutils literal notranslate"><span class="pre">mode=&quot;voxel&quot;</span></code>).</p></li>
+</ul>
+</section>
+<section id="utils-py-estabilidad-numerica">
+<h3>4. <code class="docutils literal notranslate"><span class="pre">utils.py</span></code>: Estabilidad Numérica<a class="headerlink" href="#utils-py-estabilidad-numerica" title="Link to this heading"></a></h3>
+<p>Provee funciones auxiliares para el manejo robusto de operaciones de punto flotante:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#src/utils.py#L9"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">_safe_exp()</span></code></span></a>: Evita desbordamientos (<em>overflow</em>) en cálculos exponenciales de Arrhenius clamping de argumentos.</p></li>
+<li><p><a class="reference internal" href="#src/utils.py#L16"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">_finite_or_zero()</span></code></span></a>: Sanitiza los resultados para evitar la propagación de valores <code class="docutils literal notranslate"><span class="pre">NaN</span></code> o <code class="docutils literal notranslate"><span class="pre">Inf</span></code> en las tasas de reacción.</p></li>
+</ul>
+</section>
+<section id="sistema-de-auditoria-y-modo-debug-debug-true">
+<h3>5. Sistema de Auditoría y Modo Debug (<code class="docutils literal notranslate"><span class="pre">debug=True</span></code>)<a class="headerlink" href="#sistema-de-auditoria-y-modo-debug-debug-true" title="Link to this heading"></a></h3>
+<p>El código implementa un sistema de <strong>Programación Defensiva</strong> activable mediante el flag <code class="docutils literal notranslate"><span class="pre">debug=True</span></code> en los constructores de <code class="docutils literal notranslate"><span class="pre">LatticeSOS</span></code> y <code class="docutils literal notranslate"><span class="pre">KMC_BKL</span></code>. Este modo sacrifica rendimiento a cambio de garantías estrictas de corrección física y matemática paso a paso. Las pruebas internas incluyen:</p>
+<section id="a-validez-fisica-physical-sanity">
+<h4>A. Validez Física (Physical Sanity)<a class="headerlink" href="#a-validez-fisica-physical-sanity" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p><strong>Geometría SOS</strong>: Se verifica en cada operación de la red que no se violen las restricciones del modelo Solid-On-Solid. Por ejemplo, se asegura que las alturas nunca sean negativas y que la migración superficial respete la gravedad (las partículas no pueden «levitar» o subir a un sitio más alto sin un evento de desorción previo).</p>
+<ul>
+<li><p><em>Ubicación</em>: <a class="reference internal" href="#src/lattice.py#L47"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">LatticeSOS.inc_height</span></code></span></a>, <a class="reference internal" href="#src/lattice.py#L53"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">LatticeSOS.dec_height</span></code></span></a>, <a class="reference internal" href="#src/lattice.py#L105"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">LatticeSOS.migration_targets</span></code></span></a>.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="b-integridad-de-contenedores-binning-integrity">
+<h4>B. Integridad de Contenedores (Binning Integrity)<a class="headerlink" href="#b-integridad-de-contenedores-binning-integrity" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p><strong>Conservación de Sitios</strong>: El algoritmo BKL depende de clasificar cada sitio de la red en listas (bins) según su coordinación. En modo debug, el método <a class="reference internal" href="#src/bkl.py#L160"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">_validate_integrity</span></code></span></a> recalcula el conteo total de sitios en estas listas y verifica que coincida exactamente con el tamaño de la red ($N \times N$). Esto detecta «fugas» de sitios donde una partícula podría perderse del sistema de simulación.</p></li>
+</ul>
+</section>
+<section id="c-sanidad-de-tasas-rate-sanity">
+<h4>C. Sanidad de Tasas (Rate Sanity)<a class="headerlink" href="#c-sanidad-de-tasas-rate-sanity" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p><strong>Estabilidad Numérica</strong>: Se comprueba exhaustivamente que todas las tasas de transición calculadas ($r_a, r_d, r_m, r_{inc}$) sean valores finitos y no negativos para todas las configuraciones posibles de vecinos (0-4). Esto previene la propagación silenciosa de <code class="docutils literal notranslate"><span class="pre">NaN</span></code> (Not a Number) o valores infinitos que colapsarían la simulación pasos más adelante.</p></li>
+</ul>
+</section>
+<section id="d-garantia-de-determinismo">
+<h4>D. Garantía de Determinismo<a class="headerlink" href="#d-garantia-de-determinismo" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p><strong>Seed Check</strong>: Para asegurar que cualquier error sea reproducible, el modo debug exige explícitamente que se proporcione una semilla (<code class="docutils literal notranslate"><span class="pre">rng_seed</span></code>) al generador de números aleatorios. Si no se provee, la inicialización falla preventivamente.</p></li>
+</ul>
+</section>
+<section id="e-chequeo-termodinamico-detailed-balance-check">
+<h4>E. Chequeo Termodinámico (Detailed Balance Check)<a class="headerlink" href="#e-chequeo-termodinamico-detailed-balance-check" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p><strong>Micro-reversibilidad</strong>: Cerca del equilibrio termodinámico (sobresaturación $S \approx 0$), las tasas globales de adsorción y desorción deben ser comparables. El sistema monitorea si existe una discrepancia de órdenes de magnitud injustificada entre $W_{ads}$ y $W_{des}$ en esta región, lo cual indicaría una violación de las leyes de la termodinámica (como la creación de energía libre de la nada).</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="flujo-de-ejecucion">
+<h2>Flujo de Ejecución<a class="headerlink" href="#flujo-de-ejecucion" title="Link to this heading"></a></h2>
+<p>El flujo típico de una simulación implica:</p>
+<ol class="arabic simple">
+<li><p>Instancia de <code class="docutils literal notranslate"><span class="pre">LatticeSOS</span></code> e inicialización de la superficie (plana o rugosa).</p></li>
+<li><p>Definición de <code class="docutils literal notranslate"><span class="pre">KMCParams</span></code> con las condiciones físicas del experimento.</p></li>
+<li><p>Inicialización de <code class="docutils literal notranslate"><span class="pre">KMC_BKL</span></code> inyectando la red y los parámetros.</p></li>
+<li><p>Ejecución del bucle principal mediante <code class="docutils literal notranslate"><span class="pre">run()</span></code>, que itera sobre los pasos de Monte Carlo hasta alcanzar el tiempo final, registrando la historia de eventos y generando «snapshots» de la superficie.</p></li>
+</ol>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Derechos de autor 2026, Sebastian Gaviria Giraldo - Hernan Salinas - German Torres.</p>
+  </div>
+
+  Compilado con <a href="https://www.sphinx-doc.org/">Sphinx</a> usando un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a>
+    proporcionado por <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
