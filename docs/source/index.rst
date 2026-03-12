@@ -10,7 +10,6 @@ Welcome to MalariaProject - Crystal Growth with kMC method's documentation!
    :maxdepth: 2
    :caption: Contenido del Proyecto:
    
-      introduccion
       metodologia_kmc
       datos
       notebooks
