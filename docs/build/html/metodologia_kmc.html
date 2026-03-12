@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="es">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src - Documentacion tecnica del nucleo kMC &mdash; documentación de MalariaProject - Crystal Growth with kMC method - 0.1.0</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/translations.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Búsqueda" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            MalariaProject - Crystal Growth with kMC method
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Buscar documentos" aria-label="Buscar documentos" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">src - Documentacion tecnica del nucleo kMC</a><ul>
+<li><a class="reference internal" href="#estructura-de-modulos">Estructura de modulos</a><ul>
+<li><a class="reference internal" href="#params-py">params.py</a></li>
+<li><a class="reference internal" href="#lattice-py">lattice.py</a></li>
+<li><a class="reference internal" href="#bkl-py">bkl.py</a></li>
+<li><a class="reference internal" href="#paperkmc-py">paperkMC.py</a></li>
+<li><a class="reference internal" href="#analysis-py">analysis.py</a></li>
+<li><a class="reference internal" href="#plotter-py">plotter.py</a></li>
+<li><a class="reference internal" href="#model2d-py">model2D.py</a></li>
+<li><a class="reference internal" href="#utils-py">utils.py</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#flujo-de-simulacion-recomendado">Flujo de simulacion recomendado</a></li>
+<li><a class="reference internal" href="#dependencias-internas">Dependencias internas</a></li>
+<li><a class="reference internal" href="#notas-para-sphinx">Notas para Sphinx</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MalariaProject - Crystal Growth with kMC method</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">src - Documentacion tecnica del nucleo kMC</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/metodologia_kmc.md.txt" rel="nofollow"> Ver código fuente de la página</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="src-documentacion-tecnica-del-nucleo-kmc">
+<h1>src - Documentacion tecnica del nucleo kMC<a class="headerlink" href="#src-documentacion-tecnica-del-nucleo-kmc" title="Enlace permanente a este encabezado"></a></h1>
+<p>Este directorio contiene el nucleo del modelo kinetic Monte Carlo (kMC) del proyecto, incluyendo:</p>
+<ul class="simple">
+<li><p>Definicion de la geometria de la red SOS.</p></li>
+<li><p>Definicion de parametros fisicoquimicos.</p></li>
+<li><p>Motor BKL (n-fold way) para evolucion temporal sin rechazo.</p></li>
+<li><p>Variantes para reproduccion de escenarios del paper.</p></li>
+<li><p>Rutinas de analisis y visualizacion.</p></li>
+</ul>
+<section id="estructura-de-modulos">
+<h2>Estructura de modulos<a class="headerlink" href="#estructura-de-modulos" title="Enlace permanente a este encabezado"></a></h2>
+<section id="params-py">
+<h3>params.py<a class="headerlink" href="#params-py" title="Enlace permanente a este encabezado"></a></h3>
+<p>Define <code class="docutils literal notranslate"><span class="pre">KMCParams</span></code> como <code class="docutils literal notranslate"><span class="pre">dataclass</span></code> con parametros del modelo:</p>
+<ul class="simple">
+<li><p>Parametros termicos y cineticos (<code class="docutils literal notranslate"><span class="pre">T</span></code>, <code class="docutils literal notranslate"><span class="pre">K0_plus</span></code>, <code class="docutils literal notranslate"><span class="pre">K_inc_plus</span></code>).</p></li>
+<li><p>Terminos energeticos normalizados (<code class="docutils literal notranslate"><span class="pre">E_pb_over_kT</span></code>, <code class="docutils literal notranslate"><span class="pre">phi_over_kT</span></code>).</p></li>
+<li><p>Control termodinamico (<code class="docutils literal notranslate"><span class="pre">V</span></code>, <code class="docutils literal notranslate"><span class="pre">C_eq</span></code>, <code class="docutils literal notranslate"><span class="pre">S_floor</span></code>, <code class="docutils literal notranslate"><span class="pre">S_ceil</span></code>).</p></li>
+</ul>
+</section>
+<section id="lattice-py">
+<h3>lattice.py<a class="headerlink" href="#lattice-py" title="Enlace permanente a este encabezado"></a></h3>
+<p>Define <code class="docutils literal notranslate"><span class="pre">LatticeSOS</span></code>, que modela una superficie de alturas enteras con vecindad de 4 vecinos y contorno periodico.</p>
+<p>Funciones clave:</p>
+<ul class="simple">
+<li><p>Inicializacion de superficie plana o rugosa.</p></li>
+<li><p>Conteo de enlaces para adsorcion y desorcion.</p></li>
+<li><p>Sitios destino validos para migracion.</p></li>
+</ul>
+</section>
+<section id="bkl-py">
+<h3>bkl.py<a class="headerlink" href="#bkl-py" title="Enlace permanente a este encabezado"></a></h3>
+<p>Define <code class="docutils literal notranslate"><span class="pre">KMC_BKL</span></code> y variantes (<code class="docutils literal notranslate"><span class="pre">SelectiveKMC</span></code>, <code class="docutils literal notranslate"><span class="pre">KMC_NoDesNoMig</span></code>).</p>
+<p>Responsabilidades principales:</p>
+<ul class="simple">
+<li><p>Calculo de tasas locales y globales.</p></li>
+<li><p>Clasificacion de sitios por coordinacion.</p></li>
+<li><p>Seleccion de evento por pesos BKL.</p></li>
+<li><p>Avance temporal estocastico.</p></li>
+<li><p>Registro de historial y snapshots.</p></li>
+</ul>
+</section>
+<section id="paperkmc-py">
+<h3>paperkMC.py<a class="headerlink" href="#paperkmc-py" title="Enlace permanente a este encabezado"></a></h3>
+<p>Implementa la variante calibrada para lisozima:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">PaperKMCParams</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LysozymeLattice</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PaperKMC_Engine</span></code></p></li>
+</ul>
+<p>Incluye reglas geometricas especificas por cara cristalografica y sobresaturacion estatica.</p>
+</section>
+<section id="analysis-py">
+<h3>analysis.py<a class="headerlink" href="#analysis-py" title="Enlace permanente a este encabezado"></a></h3>
+<p>Rutinas de analisis para experimentos numericos, por ejemplo:</p>
+<ul class="simple">
+<li><p>Tasa de crecimiento vs sobresaturacion.</p></li>
+<li><p>Comparacion entre caras 110 y 101.</p></li>
+</ul>
+</section>
+<section id="plotter-py">
+<h3>plotter.py<a class="headerlink" href="#plotter-py" title="Enlace permanente a este encabezado"></a></h3>
+<p>Contiene la clase <code class="docutils literal notranslate"><span class="pre">Plotter</span></code> para:</p>
+<ul class="simple">
+<li><p>Render 3D en modo superficie o voxel.</p></li>
+<li><p>Generacion de GIF de crecimiento.</p></li>
+<li><p>Curvas de conversion temporal.</p></li>
+</ul>
+</section>
+<section id="model2d-py">
+<h3>model2D.py<a class="headerlink" href="#model2d-py" title="Enlace permanente a este encabezado"></a></h3>
+<p>Implementa una variante 2D alternativa del proceso con eventos de adsorcion, desorcion, incorporacion y difusion.</p>
+</section>
+<section id="utils-py">
+<h3>utils.py<a class="headerlink" href="#utils-py" title="Enlace permanente a este encabezado"></a></h3>
+<p>Utilidades numericas y geometricas:</p>
+<ul class="simple">
+<li><p>Proteccion de exponenciales (<code class="docutils literal notranslate"><span class="pre">_safe_exp</span></code>).</p></li>
+<li><p>Sanitizacion de valores no finitos (<code class="docutils literal notranslate"><span class="pre">_finite_or_zero</span></code>).</p></li>
+<li><p>Funciones auxiliares de vecindad y energia efectiva.</p></li>
+</ul>
+</section>
+</section>
+<section id="flujo-de-simulacion-recomendado">
+<h2>Flujo de simulacion recomendado<a class="headerlink" href="#flujo-de-simulacion-recomendado" title="Enlace permanente a este encabezado"></a></h2>
+<ol class="arabic simple">
+<li><p>Instanciar <code class="docutils literal notranslate"><span class="pre">KMCParams</span></code> o <code class="docutils literal notranslate"><span class="pre">PaperKMCParams</span></code>.</p></li>
+<li><p>Instanciar <code class="docutils literal notranslate"><span class="pre">LatticeSOS</span></code> o <code class="docutils literal notranslate"><span class="pre">LysozymeLattice</span></code>.</p></li>
+<li><p>Inicializar superficie (<code class="docutils literal notranslate"><span class="pre">initialize</span></code>).</p></li>
+<li><p>Instanciar motor (<code class="docutils literal notranslate"><span class="pre">KMC_BKL</span></code> o <code class="docutils literal notranslate"><span class="pre">PaperKMC_Engine</span></code>).</p></li>
+<li><p>Ejecutar <code class="docutils literal notranslate"><span class="pre">run</span></code> hasta tiempo final o maximo de eventos.</p></li>
+<li><p>Analizar snapshots y conversion.</p></li>
+</ol>
+</section>
+<section id="dependencias-internas">
+<h2>Dependencias internas<a class="headerlink" href="#dependencias-internas" title="Enlace permanente a este encabezado"></a></h2>
+<p>Dependencias directas relevantes:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bkl.py</span></code> depende de <code class="docutils literal notranslate"><span class="pre">params.py</span></code>, <code class="docutils literal notranslate"><span class="pre">lattice.py</span></code>, <code class="docutils literal notranslate"><span class="pre">utils.py</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">paperkMC.py</span></code> depende de <code class="docutils literal notranslate"><span class="pre">bkl.py</span></code>, <code class="docutils literal notranslate"><span class="pre">params.py</span></code>, <code class="docutils literal notranslate"><span class="pre">lattice.py</span></code>, <code class="docutils literal notranslate"><span class="pre">utils.py</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">analysis.py</span></code> depende de <code class="docutils literal notranslate"><span class="pre">paperkMC.py</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">plotter.py</span></code> depende de <code class="docutils literal notranslate"><span class="pre">bkl.py</span></code>.</p></li>
+</ul>
+</section>
+<section id="notas-para-sphinx">
+<h2>Notas para Sphinx<a class="headerlink" href="#notas-para-sphinx" title="Enlace permanente a este encabezado"></a></h2>
+<ul class="simple">
+<li><p>Este archivo esta pensado para ser incluido desde <code class="docutils literal notranslate"><span class="pre">docs/source/metodologia_kmc.md</span></code>.</p></li>
+<li><p>Para API automatica, usar <code class="docutils literal notranslate"><span class="pre">sphinx-apidoc</span></code> sobre <code class="docutils literal notranslate"><span class="pre">src/</span></code> y publicar <code class="docutils literal notranslate"><span class="pre">api/modules</span></code> en <code class="docutils literal notranslate"><span class="pre">index.rst</span></code>.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Derechos de autor 2026, Sebastian Gaviria Giraldo - Hernan Salinas - German Torres.</p>
+  </div>
+
+  Compilado con <a href="https://www.sphinx-doc.org/">Sphinx</a> usando un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a>
+    proporcionado por <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
