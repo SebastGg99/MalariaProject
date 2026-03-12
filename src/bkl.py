@@ -20,35 +20,36 @@ class KMC_BKL:
         if debug and rng_seed is None:
             raise ValueError("⛔ [DEBUG ERROR] Se requiere una semilla fija (rng_seed) para garantizar determinismo en modo debug.")
 
-        self.rng = np.random.default_rng(rng_seed)
+        self.rng = np.random.default_rng(rng_seed) # Instancia del generador de nums aleatorios moderno de numpy
         self.debug = debug
 
         # Reservas
         self.N0 = int(N_bulk0)   # total inicial para escalar adsorción y conversión
-        self.N_bulk = int(N_bulk0)
+        self.N_bulk = int(N_bulk0) # Contador dinámico de materia en el bulk (reservorio)
         self.N_inc = 0
 
         # Estado temporal
-        self.time_scale = float(time_scale)
-        self.t = 0.0
+        self.time_scale = float(time_scale) # Factor multiplicativo para el tiempo. Depende de las unidades físicas reales que se quieran simular
+        self.t = 0.0 # reloj interno de la simulación. Comienza en 0.0 y avanza estocásticamente en cada paso del algoritmo BKL
 
         # Bookkeeping
-        self.history = []  # (t, evt, site)
+        self.history = []  # lista que almacenará tuplas con (t, evt, site)
         self.counts = {"adsorption":0, "desorption":0, "migration":0, "incorporation":0}
 
         # Semillas iniciales
         for _ in range(max(0, int(n_seeds))):
+            # Coordenadas aleatorias dentro de los límites de la red
             x, y = self.rng.integers(0, lattice.size, size=2)
-            self.lat.inc_height((x,y), 1)
-            self.N_inc += 1
-            self.N_bulk = max(0, self.N_bulk - 1)
+            self.lat.inc_height((x,y), 1) # Método de LatticeSOS para incrementar la altura en el sitio (se deposita una partícula)
+            self.N_inc += 1 # Contador de partículas incorporadas (convertidas) aumenta
+            self.N_bulk = max(0, self.N_bulk - 1) # El reservorio se reduce por cada partícula que se deposita en la red
 
     # ---- Supersaturation ----
     @property
     # Calcula la sobresaturación
     def supersaturation(self) -> float:
-        C = self.N_bulk / max(self.p.V, 1e-12)
-        S = np.log((C + 1e-15) / max(self.p.C_eq, 1e-15))
+        C = self.N_bulk / max(self.p.V, 1e-12) # Concentración del reservorio (bulk)
+        S = np.log((C + 1e-15) / max(self.p.C_eq, 1e-15)) # Sobresaturación logarítmica
         return float(np.clip(S, self.p.S_floor, self.p.S_ceil))
 
     @property
@@ -310,91 +311,173 @@ class KMC_BKL:
 
         return snaps
 
-    def plot_crystal_3d(self, mode: str = "surface", elev: int = 45, azim: int = 45,
-                        cmap: str = "viridis", save_path: Optional[str] = None,
-                        title: Optional[str] = None, snapshots: Optional[List[Tuple[float, np.ndarray, float]]] = None,
-                        t_snapshot: Optional[float] = None):
-        """
-        Visualiza el cristal 3D (superficie continua o cubos discretos).
 
-        Parámetros:
-            mode: 'surface' o 'voxel'
-            elev, azim: ángulos de cámara
-            cmap: colormap para modo superficie
-            save_path: ruta opcional para guardar la imagen
-            title: título opcional
-            snapshots: lista opcional de snapshots generada por run()
-            t_snapshot: tiempo específico para extraer el cristal más cercano
-        """
-        import matplotlib.pyplot as plt
-        from mpl_toolkits.mplot3d import Axes3D  # noqa: F401
-        import numpy as np
+# Clase Wrapper para apagar/encender procesos selectivamente
+class SelectiveKMC(KMC_BKL):
+    """
+    Versión modificada de KMC_BKL que permite apagar selectivamente
+    la desorción o la migración sobrescribiendo las funciones de tasa.
+    """
+    def __init__(self, lattice, params, N_bulk0, rng_seed=None, 
+                 enable_desorption=True, enable_migration=True, **kwargs):
+        # Inicializamos la clase padre
+        super().__init__(lattice, params, N_bulk0, rng_seed, **kwargs)
+        self.enable_desorption = enable_desorption
+        self.enable_migration = enable_migration
 
-        # ============================
-        # Seleccionar snapshot a graficar
-        # ============================
-        if snapshots is not None and len(snapshots) > 0 and t_snapshot is not None:
-            # Busca el snapshot con tiempo más cercano
-            times = [abs(t - t_snapshot) for t, _, _ in snapshots]
-            idx = int(np.argmin(times))
-            t_sel, heights, conv = snapshots[idx]
-            print(f"🧩 Snapshot seleccionado: t={t_sel:.3f} (conv={conv:.2f}%)")
-        elif snapshots is not None and len(snapshots) > 0:
-            # Toma el último snapshot si no se especifica tiempo
-            t_sel, heights, conv = snapshots[-1]
-            print(f"🧩 Usando último snapshot disponible: t={t_sel:.3f} (conv={conv:.2f}%)")
-        else:
-            # Usa el estado actual del cristal
-            heights = self.lat.heights.copy()
-            t_sel = self.t
-            conv = self.conversion_percent
-            print(f"🧩 Usando estado actual: t={t_sel:.3f} (conv={conv:.2f}%)")
+    # Sobrescribimos r_d (tasa de desorción)
+    def r_d(self, i: int) -> float:
+        if not self.enable_desorption:
+            return 0.0
+        return super().r_d(i)
 
-        # ============================
-        # Generar figura
-        # ============================
-        Lx, Ly = heights.shape
-        X, Y = np.meshgrid(np.arange(Lx), np.arange(Ly), indexing="ij")
+    # Sobrescribimos r_m (tasa de migración)
+    def r_m(self, i: int) -> float:
+        if not self.enable_migration:
+            return 0.0
+        return super().r_m(i)
 
-        fig = plt.figure(figsize=(7, 6))
-        ax = fig.add_subplot(111, projection='3d')
-        ax.view_init(elev=elev, azim=azim)
 
-        if mode == "surface":
-            surf = ax.plot_surface(X, Y, heights, cmap=cmap, linewidth=0, antialiased=True)
-            fig.colorbar(surf, shrink=0.5, aspect=10, label="Altura")
+class KMC_NoDesNoMig(KMC_BKL):
+    """
+    Clase heredera configurable (retrocompatible):
+    - Por defecto: desorción OFF y migración OFF (comportamiento original).
+    - Permite activar/desactivar selectivamente ambos procesos.
 
-        elif mode == "voxel":
-            max_h = int(np.max(heights))
-            voxels = np.zeros((Lx, Ly, max_h + 1), dtype=bool)
-            for i in range(Lx):
-                for j in range(Ly):
-                    h = int(heights[i, j])
-                    if h > 0:
-                        voxels[i, j, :h] = True
+    Nota técnica:
+    El nombre de la clase ya no describe exactamente su comportamiento cuando
+    enable_desorption=True o enable_migration=True. Se mantiene por compatibilidad.
+    """
+    def __init__(
+        self,
+        lattice,
+        params,
+        N_bulk0,
+        rng_seed=None,
+        enable_desorption: bool = False,
+        enable_migration: bool = False,
+        **kwargs,
+    ):
+        # Flags de control selectivo
+        self.enable_desorption = bool(enable_desorption)
+        self.enable_migration = bool(enable_migration)
 
-            # Colores tipo cristal (azul translúcido)
-            colors = np.zeros(voxels.shape + (4,), dtype=float)
-            colors[..., :] = [0.2, 0.3, 0.8, 0.9]  # RGBA (azul translúcido)
+        # Inicialización base
+        super().__init__(
+            lattice=lattice,
+            params=params,
+            N_bulk0=N_bulk0,
+            rng_seed=rng_seed,
+            **kwargs,
+        )
 
-            ax.voxels(voxels, facecolors=colors, edgecolor='black', linewidth=0.2)
-            ax.set_box_aspect((Lx, Ly, max_h))  # asegura proporción cúbica
+    def r_d(self, i: int) -> float:
+        # Si desorción está apagada, su tasa es exactamente cero
+        if not self.enable_desorption:
+            return 0.0
+        return super().r_d(i)
 
-        else:
-            raise ValueError("mode debe ser 'surface' o 'voxel'")
+    def r_m(self, i: int) -> float:
+        # Si migración está apagada, su tasa es exactamente cero
+        if not self.enable_migration:
+            return 0.0
+        return super().r_m(i)
 
-        # Etiquetas
-        ax.set_xlabel("x")
-        ax.set_ylabel("y")
-        ax.set_zlabel("height")
+    def step(self) -> bool:
+        # Validación opcional en debug
+        if self.debug:
+            self._validate_integrity("Pre-Step KMC_NoDesNoMig(selectivo)")
 
-        # Título dinámico
-        if title is None:
-            title = f"Crystal at t={t_sel:.2f}, conv={conv:.1f}%"
-        ax.set_title(title)
+        # Clasificación mínima obligatoria (siempre activas)
+        A_bins = self._classify_adsorption_sites()
+        I_bins = self._classify_incorporation_sites()
 
-        if save_path:
-            plt.savefig(save_path, dpi=250, bbox_inches="tight", transparent=True)
-            print(f"💾 Imagen guardada en: {save_path}")
+        # Clasificación selectiva (solo si el proceso está activo)
+        D_bins = self._classify_desorption_sites() if self.enable_desorption else {0: [], 1: [], 2: [], 3: [], 4: []}
+        M_bins = self._classify_migration_sites() if self.enable_migration else {0: [], 1: [], 2: [], 3: []}
 
-        plt.show()
+        # Pesos globales por tipo de evento
+        Wa = sum(len(A_bins[i]) * self.r_a(i) for i in A_bins)
+        Wd = sum(len(D_bins[i]) * self.r_d(i) for i in D_bins if len(D_bins[i]) > 0)
+        Wm = sum(len(M_bins[i]) * self.r_m(i) for i in M_bins if len(M_bins[i]) > 0)
+        Wi = sum(len(I_bins[i]) * self.r_inc(i) for i in I_bins if len(I_bins[i]) > 0)
+
+        # Sanitización numérica
+        Wa = _finite_or_zero(Wa)
+        Wd = _finite_or_zero(Wd)
+        Wm = _finite_or_zero(Wm)
+        Wi = _finite_or_zero(Wi)
+        Wtot = Wa + Wd + Wm + Wi
+
+        # Si no hay eventos posibles, parar
+        if (not np.isfinite(Wtot)) or (Wtot <= 0.0):
+            return False
+
+        # Avance temporal BKL
+        z = max(self.rng.random(), 1e-15)
+        dt = -np.log(z) / Wtot * self.time_scale
+        if (not np.isfinite(dt)) or (dt < 0.0):
+            return False
+        self.t += dt
+
+        # Selección de tipo de evento
+        etype = self._choose_event_type(Wa, Wd, Wm, Wi)
+        if etype == "none":
+            return False
+
+        site = None
+
+        if etype == "adsorption":
+            # Elegir clase y sitio para adsorción
+            weights = {i: len(A_bins[i]) * self.r_a(i) for i in A_bins if len(A_bins[i]) > 0}
+            if len(weights) == 0:
+                return True
+            cls = self._choose_class(weights)
+            site = self._choose_site_uniform(A_bins[cls])
+
+            # Aplicar evento
+            self.lat.inc_height(site, 1)
+            if self.N_bulk > 0:
+                self.N_bulk -= 1
+
+        elif etype == "desorption":
+            # Evento solo posible si está activo (por tasas/pesos)
+            weights = {i: len(D_bins[i]) * self.r_d(i) for i in D_bins if len(D_bins[i]) > 0}
+            if len(weights) == 0:
+                return True
+            cls = self._choose_class(weights)
+            site = self._choose_site_uniform(D_bins[cls])
+
+            if self.lat.get_height(site) > 0:
+                self.lat.dec_height(site, 1)
+                self.N_bulk += 1
+
+        elif etype == "migration":
+            # Evento solo posible si está activo (por tasas/pesos)
+            weights = {i: len(M_bins[i]) * self.r_m(i) for i in M_bins if len(M_bins[i]) > 0}
+            if len(weights) == 0:
+                return True
+            cls = self._choose_class(weights)
+            site = self._choose_site_uniform(M_bins[cls])
+
+            targets = self.lat.migration_targets(site)
+            if len(targets) > 0 and self.lat.get_height(site) > 0:
+                dst = self._choose_site_uniform(targets)
+                self.lat.dec_height(site, 1)
+                self.lat.inc_height(dst, 1)
+
+        elif etype == "incorporation":
+            # Elegir clase y sitio para incorporación
+            weights = {i: len(I_bins[i]) * self.r_inc(i) for i in I_bins if len(I_bins[i]) > 0}
+            if len(weights) == 0:
+                return True
+            cls = self._choose_class(weights)
+            site = self._choose_site_uniform(I_bins[cls])
+
+            # Bookkeeping químico
+            self.N_inc += 1
+
+        # Registrar evento
+        self.counts[etype] += 1
+        self.history.append((self.t, etype, site))
+        return True
