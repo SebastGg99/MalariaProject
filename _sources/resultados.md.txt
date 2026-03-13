@@ -26,7 +26,3 @@ Ejemplo:
 
 Versionar resultados finales que soporten reportes o publicaciones.
 No versionar salidas intermedias voluminosas o temporales.
-
-## Notas para Sphinx
-
-Este README puede citarse en la documentacion de uso para explicar donde encontrar resultados y como interpretarlos.

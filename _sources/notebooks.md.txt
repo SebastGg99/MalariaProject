@@ -25,7 +25,3 @@ Este directorio contiene notebooks de exploracion, calibracion y reproduccion de
 - Fijar semillas cuando se requiera reproducibilidad.
 - Evitar mezclar resultados de experimentos con parametros distintos en una misma sesion.
 - Exportar figuras finales a `results/` con nombres descriptivos.
-
-## Notas para Sphinx
-
-Este README puede incluirse en la documentacion de uso para explicar el flujo experimental sin duplicar contenido.

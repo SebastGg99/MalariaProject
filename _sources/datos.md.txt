@@ -26,7 +26,3 @@ Para cada dataset nuevo, documentar:
 - Fecha.
 - Preprocesamiento aplicado.
 - Script o notebook que lo consume.
-
-## Notas para Sphinx
-
-Este README debe enlazarse desde la seccion de uso o metodologia para mantener trazabilidad de insumos.
