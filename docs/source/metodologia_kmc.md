@@ -94,8 +94,3 @@ Dependencias directas relevantes:
 - `paperkMC.py` depende de `bkl.py`, `params.py`, `lattice.py`, `utils.py`.
 - `analysis.py` depende de `paperkMC.py`.
 - `plotter.py` depende de `bkl.py`.
-
-## Notas para Sphinx
-
-- Este archivo esta pensado para ser incluido desde `docs/source/metodologia_kmc.md`.
-- Para API automatica, usar `sphinx-apidoc` sobre `src/` y publicar `api/modules` en `index.rst`.

@@ -8,7 +8,7 @@ Welcome to MalariaProject - Crystal Growth with kMC method's documentation!
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Contenidos:
 
    introduccion
    metodologia_kmc
