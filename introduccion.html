@@ -19,7 +19,9 @@
       <script src="_static/translations.js?v=f85f4cfb"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Índice" href="genindex.html" />
-    <link rel="search" title="Búsqueda" href="search.html" /> 
+    <link rel="search" title="Búsqueda" href="search.html" />
+    <link rel="next" title="src - Documentacion tecnica del nucleo kMC" href="metodologia_kmc.html" />
+    <link rel="prev" title="Welcome to MalariaProject - Crystal Growth with kMC method’s documentation!" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -41,30 +43,35 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <!-- Local TOC -->
-              <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">MalariaProject</a><ul>
-<li><a class="reference internal" href="#descripcion-general">Descripción General</a></li>
-<li><a class="reference internal" href="#estructura-del-codigo-fuente-src">Estructura del Código Fuente (<code class="docutils literal notranslate"><span class="pre">src/</span></code>)</a><ul>
-<li><a class="reference internal" href="#lattice-py-topologia-y-estado-de-la-superficie">1. <code class="docutils literal notranslate"><span class="pre">lattice.py</span></code>: Topología y Estado de la Superficie</a></li>
-<li><a class="reference internal" href="#params-py-parametros-fisicoquimicos">2. <code class="docutils literal notranslate"><span class="pre">params.py</span></code>: Parámetros Fisicoquímicos</a></li>
-<li><a class="reference internal" href="#bkl-py-motor-de-simulacion-algoritmo-bkl">3. <code class="docutils literal notranslate"><span class="pre">bkl.py</span></code>: Motor de Simulación (Algoritmo BKL)</a></li>
-<li><a class="reference internal" href="#utils-py-estabilidad-numerica">4. <code class="docutils literal notranslate"><span class="pre">utils.py</span></code>: Estabilidad Numérica</a></li>
-<li><a class="reference internal" href="#sistema-de-auditoria-y-modo-debug-debug-true">5. Sistema de Auditoría y Modo Debug (<code class="docutils literal notranslate"><span class="pre">debug=True</span></code>)</a><ul>
-<li><a class="reference internal" href="#a-validez-fisica-physical-sanity">A. Validez Física (Physical Sanity)</a></li>
-<li><a class="reference internal" href="#b-integridad-de-contenedores-binning-integrity">B. Integridad de Contenedores (Binning Integrity)</a></li>
-<li><a class="reference internal" href="#c-sanidad-de-tasas-rate-sanity">C. Sanidad de Tasas (Rate Sanity)</a></li>
-<li><a class="reference internal" href="#d-garantia-de-determinismo">D. Garantía de Determinismo</a></li>
-<li><a class="reference internal" href="#e-chequeo-termodinamico-detailed-balance-check">E. Chequeo Termodinámico (Detailed Balance Check)</a></li>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">MalariaProject</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#descripcion-general">Descripción General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#estructura-del-codigo-fuente-src">Estructura del Código Fuente (<code class="docutils literal notranslate"><span class="pre">src/</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#lattice-py-topologia-y-estado-de-la-superficie">1. <code class="docutils literal notranslate"><span class="pre">lattice.py</span></code>: Topología y Estado de la Superficie</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#params-py-parametros-fisicoquimicos">2. <code class="docutils literal notranslate"><span class="pre">params.py</span></code>: Parámetros Fisicoquímicos</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bkl-py-motor-de-simulacion-algoritmo-bkl">3. <code class="docutils literal notranslate"><span class="pre">bkl.py</span></code>: Motor de Simulación (Algoritmo BKL)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#utils-py-estabilidad-numerica">4. <code class="docutils literal notranslate"><span class="pre">utils.py</span></code>: Estabilidad Numérica</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sistema-de-auditoria-y-modo-debug-debug-true">5. Sistema de Auditoría y Modo Debug (<code class="docutils literal notranslate"><span class="pre">debug=True</span></code>)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#a-validez-fisica-physical-sanity">A. Validez Física (Physical Sanity)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#b-integridad-de-contenedores-binning-integrity">B. Integridad de Contenedores (Binning Integrity)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#c-sanidad-de-tasas-rate-sanity">C. Sanidad de Tasas (Rate Sanity)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#d-garantia-de-determinismo">D. Garantía de Determinismo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#e-chequeo-termodinamico-detailed-balance-check">E. Chequeo Termodinámico (Detailed Balance Check)</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#flujo-de-ejecucion">Flujo de Ejecución</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#flujo-de-ejecucion">Flujo de Ejecución</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="metodologia_kmc.html">src - Documentacion tecnica del nucleo kMC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="datos.html">data - Convenciones de datos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks.html">notebooks - Guia de experimentos reproducibles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resultados.html">results - Artefactos de salida</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pruebas.html">tests - Estrategia de validacion</a></li>
 </ul>
-</div>
+
         </div>
       </div>
     </nav>
@@ -259,7 +266,10 @@ El corazón del método «rejection-free» o n-fold way:</p>
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pie de página">
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to MalariaProject - Crystal Growth with kMC method’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Anterior</a>
+        <a href="metodologia_kmc.html" class="btn btn-neutral float-right" title="src - Documentacion tecnica del nucleo kMC" accesskey="n" rel="next">Siguiente <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 
