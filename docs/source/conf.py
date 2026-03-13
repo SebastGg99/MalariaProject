@@ -16,12 +16,15 @@ release = '0.1.0'
 
 import sphinx_rtd_theme
 
-
 extensions = [
-'myst_parser',
-'sphinx_rtd_theme',
+    'myst_parser',
+    'sphinx_rtd_theme',
 ]
 
+source_suffix = {
+    '.rst': 'restructuredtext',
+    '.md': 'markdown',
+}
 
 html_theme = "sphinx_rtd_theme"
 html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
@@ -37,4 +40,4 @@ language = 'es'
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 # html_theme = 'alabaster'
-html_static_path = ['_static']
+#html_static_path = ['_static']
