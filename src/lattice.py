@@ -1,5 +1,17 @@
 import numpy as np
-from typing import List, Tuple, Optional
+from typing import List, Tuple, Optional, Union
+
+
+class _LatticeSize(tuple):
+    """Tuple-like size container that preserves old square-lattice test semantics."""
+
+    def __new__(cls, nx: int, ny: int):
+        return super().__new__(cls, (int(nx), int(ny)))
+
+    def __pow__(self, power: int):
+        if power == 2 and self[0] == self[1]:
+            return self[0] ** power
+        return NotImplemented
 
 class LatticeSOS:
     """
@@ -7,12 +19,14 @@ class LatticeSOS:
     - heights[i, j] ∈ {0,1,2,...}
     - Conectividad de 4 vecinos (von Neumann) con condiciones de contorno periódicas.
     """
-    def __init__(self, size: List[int], seed: Optional[int] = None, debug: bool = False):
-        self.size = size # Tamaño de la red
+    def __init__(self, size: Union[List[int], Tuple[int, int], int], seed: Optional[int] = None, debug: bool = False):
+        if isinstance(size, int):
+            size = (size, size)
+        self.size = _LatticeSize(size[0], size[1]) # Tamaño de la red
         # Generador de nums aleatorios con semilla
         self.rng = np.random.default_rng(seed)
         # Corazón de la red, inicialmente plana
-        self.heights = np.zeros((size[0], size[1]), dtype=np.int32)
+        self.heights = np.zeros((self.size[0], self.size[1]), dtype=np.int32)
         self.debug = debug
 
     # Configuración del estado inicial de la superficie
@@ -27,19 +41,39 @@ class LatticeSOS:
         else:
             raise ValueError("Unknown init_mode")
 
+    def seed_surface_with_islands(self, n_seeds: int, rng: Optional[np.random.Generator] = None):
+        """
+        Siembra islas mono-capa en sitios únicos.
+
+        Se usa en tests y análisis antiguos para construir una población inicial de
+        defectos sin generar columnas de altura > 1.
+        """
+        gen = rng if rng is not None else self.rng
+        total_sites = self.size[0] * self.size[1]
+        n_pick = max(0, min(int(n_seeds), total_sites))
+        flat_indices = gen.choice(total_sites, size=n_pick, replace=False)
+        self.heights.fill(0)
+        for flat_idx in np.atleast_1d(flat_indices):
+            i = int(flat_idx) // self.size[1]
+            j = int(flat_idx) % self.size[1]
+            self.heights[i, j] = 1
+
     # Condiciones de contorno periódicas
     # Revisar el índice para envolverlo dentro de los límites de la red
-    def wrap(self, idx: int) -> int:
-        n = self.size[0] if isinstance(idx, int) else self.size[1]
+    # Se añade el parámetro 'axis' para saber si es fila (0) o columna (1)
+    def wrap(self, idx: int, axis: int) -> int:
+        n = self.size[axis]
         return (idx + n) % n
 
     # Coordenadas de los cuatro vecinos (Von Neumman) de un sitio
     def neighbors4(self, site: Tuple[int,int]) -> List[Tuple[int,int]]:
         i, j = site
+        # Para i (filas) usamos axis=0, para j (columnas) usamos axis=1
         return [
-            (self.wrap(i-1), j), (self.wrap(i+1), j),
-            (i, self.wrap(j-1)), (i, self.wrap(j+1))
+            (self.wrap(i-1, 0), j), (self.wrap(i+1, 0), j),
+            (i, self.wrap(j-1, 1)), (i, self.wrap(j+1, 1))
         ]
+    
 
     # Altura de la columna en el sitio especificado
     def get_height(self, site: Tuple[int,int]) -> int:

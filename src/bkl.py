@@ -1,9 +1,14 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from typing import Dict, List, Tuple, Optional
-from params import KMCParams
-from lattice import LatticeSOS
-from utils import _safe_exp, _finite_or_zero
+try:
+    from .params import KMCParams
+    from .lattice import LatticeSOS
+    from .utils import _safe_exp, _finite_or_zero
+except ImportError:  # pragma: no cover - compatibility with legacy script-style imports
+    from params import KMCParams
+    from lattice import LatticeSOS
+    from utils import _safe_exp, _finite_or_zero
 
 # =============================
 # Adaptive BKL kMC with incorporation (robusto)
@@ -48,6 +53,8 @@ class KMC_BKL:
     @property
     # Calcula la sobresaturación
     def supersaturation(self) -> float:
+        if getattr(self.p, "fixed_sigma", None) is not None:
+            return float(np.clip(self.p.fixed_sigma, self.p.S_floor, self.p.S_ceil))
         C = self.N_bulk / max(self.p.V, 1e-12) # Concentración del reservorio (bulk)
         S = np.log((C + 1e-15) / max(self.p.C_eq, 1e-15)) # Sobresaturación logarítmica
         return float(np.clip(S, self.p.S_floor, self.p.S_ceil))
@@ -61,7 +68,8 @@ class KMC_BKL:
 
     # ---- Rate functions (con safe_exp y clamps) ----
     def r_a(self, i: int) -> float:
-        if self.N_bulk <= 0:
+        fixed_sigma = getattr(self.p, "fixed_sigma", None)
+        if self.N_bulk <= 0 and fixed_sigma is None:
             return 0.0
         S = self.supersaturation
         # evitar dividir por S~0: usar signo para no cambiar la física cualitativa
@@ -69,7 +77,8 @@ class KMC_BKL:
         arg = S + i * (self.p.delta / max(S, eps))
         base = self.p.K0_plus * _safe_exp(arg)
         # factor de reserva finita (empuja a meseta)
-        base *= (self.N_bulk / max(self.N0, 1))
+        if fixed_sigma is None:
+            base *= (self.N_bulk / max(self.N0, 1))
         return _finite_or_zero(base)
 
     def r_d(self, i: int) -> float:
@@ -179,6 +188,30 @@ class KMC_BKL:
              raise AssertionError(f"⛔ [BIN ERROR] Pérdida de sitios en desorción: {count_D} ocupados + {empty_sites} vacíos != {total_pixels}")
 
         print(f"✅ [DEBUG {self.t:.4f}] Integridad verificada: {context_msg}")
+
+    def _adsorption_probabilities_3class(self) -> Dict[int, float]:
+        A_bins = self._classify_adsorption_sites()
+        rates_a = {i: self.r_a(i) for i in range(3)}
+        #rates_a = {i: self.r_a(i) for i in range(5)}
+        # Wa = sum(len(A_bins[i]) * rates_a[i] for i in range(5))
+        Wa = sum(len(A_bins[i]) * rates_a[i] for i in range(3))
+
+        if Wa <= 0.0:
+            return {0: 0.0, 1: 0.0, 2: 0.0}
+
+        #probs_raw = {i: (len(A_bins[i]) * rates_a[i]) / Wa for i in range(5)}
+        probs_raw = {i: (len(A_bins[i]) * rates_a[i]) / Wa for i in range(3)}
+
+        probs_merged = {
+            0: probs_raw.get(0, 0.0),
+            1: probs_raw.get(1, 0.0),
+            #2: sum(probs_raw.get(i, 0.0) for i in (2, 3, 4)),
+            2: probs_raw.get(2, 0.0),
+        }
+        total_prob = sum(probs_merged.values())
+        if total_prob > 0.0:
+            probs_merged = {i: p / total_prob for i, p in probs_merged.items()}
+        return probs_merged
 
     # ---- One kMC step (con defensas) ----
     def step(self) -> bool:

@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Optional
 
 @dataclass
 class KMCParams:
@@ -11,5 +12,6 @@ class KMCParams:
     # supersaturación dinámica
     V: float
     C_eq: float
+    fixed_sigma: Optional[float] = None
     S_floor: float = -5.0
     S_ceil: float = 8.0

@@ -3,7 +3,10 @@ from typing import List, Tuple, Optional
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D  # noqa: F401
 from matplotlib.animation import FuncAnimation
-from bkl import KMC_BKL
+try:
+    from .bkl import KMC_BKL
+except ImportError:  # pragma: no cover - compatibility with legacy script-style imports
+    from bkl import KMC_BKL
 
 class Plotter:
     def __init__(self, kmc: KMC_BKL):
