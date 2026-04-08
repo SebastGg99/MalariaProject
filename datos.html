@@ -49,9 +49,9 @@
 <li class="toctree-l1"><a class="reference internal" href="metodologia_kmc.html">src - Documentacion tecnica del nucleo kMC</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">data - Convenciones de datos</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#estado-actual">Estado actual</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#que-tipos-de-datos-van-aqui">Que tipos de datos van aqui</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#que-tipos-de-datos-deben-ir-en-data">Que tipos de datos deben ir en <code class="docutils literal notranslate"><span class="pre">data/</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#reglas-de-formato-recomendadas">Reglas de formato recomendadas</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#trazabilidad">Trazabilidad</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#trazabilidad-minima-por-dataset">Trazabilidad minima por dataset</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="notebooks.html">notebooks - Guia de experimentos reproducibles</a></li>
@@ -85,16 +85,19 @@
              
   <section id="data-convenciones-de-datos">
 <h1>data - Convenciones de datos<a class="headerlink" href="#data-convenciones-de-datos" title="Link to this heading"></a></h1>
-<p>Este directorio esta reservado para datos de entrada del proyecto.</p>
+<p>La carpeta <code class="docutils literal notranslate"><span class="pre">data/</span></code> esta reservada para datasets de entrada curados del proyecto.</p>
 <section id="estado-actual">
 <h2>Estado actual<a class="headerlink" href="#estado-actual" title="Link to this heading"></a></h2>
-<p>Actualmente no hay datasets versionados en esta carpeta.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">data/</span></code> se encuentra vacia (solo estructura de directorio).</p></li>
+<li><p>Existen datos de referencia usados en notebooks dentro de <code class="docutils literal notranslate"><span class="pre">notebooks/</span></code> (por ejemplo <code class="docutils literal notranslate"><span class="pre">beta-hematina.txt</span></code>).</p></li>
+</ul>
 </section>
-<section id="que-tipos-de-datos-van-aqui">
-<h2>Que tipos de datos van aqui<a class="headerlink" href="#que-tipos-de-datos-van-aqui" title="Link to this heading"></a></h2>
+<section id="que-tipos-de-datos-deben-ir-en-data">
+<h2>Que tipos de datos deben ir en <code class="docutils literal notranslate"><span class="pre">data/</span></code><a class="headerlink" href="#que-tipos-de-datos-deben-ir-en-data" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>Tablas experimentales de referencia.</p></li>
-<li><p>Series temporales para validacion.</p></li>
+<li><p>Series temporales de validacion.</p></li>
 <li><p>Insumos para calibracion de parametros.</p></li>
 </ul>
 </section>
@@ -103,17 +106,17 @@
 <ul class="simple">
 <li><p>Preferir CSV o TXT tabular con encabezados claros.</p></li>
 <li><p>Incluir unidades en nombres de columnas cuando aplique.</p></li>
-<li><p>Evitar archivos binarios sin documentacion asociada.</p></li>
+<li><p>Evitar binarios sin descripcion o sin script consumidor asociado.</p></li>
 </ul>
 </section>
-<section id="trazabilidad">
-<h2>Trazabilidad<a class="headerlink" href="#trazabilidad" title="Link to this heading"></a></h2>
-<p>Para cada dataset nuevo, documentar:</p>
+<section id="trazabilidad-minima-por-dataset">
+<h2>Trazabilidad minima por dataset<a class="headerlink" href="#trazabilidad-minima-por-dataset" title="Link to this heading"></a></h2>
+<p>Para cada dataset nuevo, registrar en documentacion:</p>
 <ul class="simple">
 <li><p>Fuente.</p></li>
-<li><p>Fecha.</p></li>
+<li><p>Fecha de descarga/generacion.</p></li>
 <li><p>Preprocesamiento aplicado.</p></li>
-<li><p>Script o notebook que lo consume.</p></li>
+<li><p>Notebook o script que lo consume.</p></li>
 </ul>
 </section>
 </section>

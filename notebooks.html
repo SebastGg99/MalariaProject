@@ -49,8 +49,8 @@
 <li class="toctree-l1"><a class="reference internal" href="metodologia_kmc.html">src - Documentacion tecnica del nucleo kMC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="datos.html">data - Convenciones de datos</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">notebooks - Guia de experimentos reproducibles</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#inventario-de-notebooks">Inventario de notebooks</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#archivos-auxiliares">Archivos auxiliares</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#inventario-actual">Inventario actual</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#archivos-de-apoyo-en-notebooks">Archivos de apoyo en notebooks/</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#orden-sugerido-de-ejecucion">Orden sugerido de ejecucion</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#buenas-practicas">Buenas practicas</a></li>
 </ul>
@@ -85,37 +85,44 @@
              
   <section id="notebooks-guia-de-experimentos-reproducibles">
 <h1>notebooks - Guia de experimentos reproducibles<a class="headerlink" href="#notebooks-guia-de-experimentos-reproducibles" title="Link to this heading"></a></h1>
-<p>Este directorio contiene notebooks de exploracion, calibracion y reproduccion de resultados del modelo kMC.</p>
-<section id="inventario-de-notebooks">
-<h2>Inventario de notebooks<a class="headerlink" href="#inventario-de-notebooks" title="Link to this heading"></a></h2>
+<p>Esta carpeta contiene notebooks operativos para el flujo base, la linea v2 y comparaciones de sensibilidad.</p>
+<section id="inventario-actual">
+<h2>Inventario actual<a class="headerlink" href="#inventario-actual" title="Link to this heading"></a></h2>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">Malaria002D_v1.ipynb</span></code>: experimentos del modelo base 2D.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">paper_kMC.ipynb</span></code>: reproduccion y analisis de la variante del paper.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">experiments_1.ipynb</span></code> a <code class="docutils literal notranslate"><span class="pre">experiments_4.ipynb</span></code>: baterias de pruebas y sensibilidad de parametros.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Malaria002D_v1.ipynb</span></code>: pruebas del modelo alternativo 2D.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">modern_kMC.ipynb</span></code>: exploracion del flujo kMC principal.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">paper_kMC.ipynb</span></code>: experimentos de la linea paper/base historica.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">paper_kMC_v2.ipynb</span></code>: experimentos con la linea v2 (<code class="docutils literal notranslate"><span class="pre">*_v2.py</span></code>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">experiments_1.ipynb</span></code> a <code class="docutils literal notranslate"><span class="pre">experiments_4.ipynb</span></code>: barridos de parametros y escenarios.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">experiments_v2.ipynb</span></code>: baterias de experimentos sobre la formulacion v2.</p></li>
 </ul>
 </section>
-<section id="archivos-auxiliares">
-<h2>Archivos auxiliares<a class="headerlink" href="#archivos-auxiliares" title="Link to this heading"></a></h2>
+<section id="archivos-de-apoyo-en-notebooks">
+<h2>Archivos de apoyo en notebooks/<a class="headerlink" href="#archivos-de-apoyo-en-notebooks" title="Link to this heading"></a></h2>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">beta-hematina.txt</span></code>: datos de referencia usados en algunas comparaciones.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">beta-hematina.txt</span></code>: referencia tabular usada en comparaciones.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">adsorption_probabilities_vs_sigma_3.png</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">adsorption_probabilities_vs_sigma_4.png</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">adsorption_probabilities_vs_sigma_5.png</span></code></p></li>
 </ul>
 </section>
 <section id="orden-sugerido-de-ejecucion">
 <h2>Orden sugerido de ejecucion<a class="headerlink" href="#orden-sugerido-de-ejecucion" title="Link to this heading"></a></h2>
 <ol class="arabic simple">
-<li><p>Cargar entorno y dependencias del proyecto.</p></li>
-<li><p>Ejecutar celdas de import y configuracion de ruta.</p></li>
-<li><p>Ejecutar bloques de inicializacion de parametros y red.</p></li>
-<li><p>Correr simulaciones por bloques de tiempo.</p></li>
-<li><p>Generar graficas de crecimiento y probabilidad de sitio.</p></li>
+<li><p>Activar entorno y dependencias del proyecto.</p></li>
+<li><p>Ejecutar imports y configuracion de rutas.</p></li>
+<li><p>Inicializar parametros/red para la linea elegida (base o v2).</p></li>
+<li><p>Ejecutar simulaciones por bloques (tiempo o eventos).</p></li>
+<li><p>Guardar graficas y GIF en <code class="docutils literal notranslate"><span class="pre">results/</span></code>.</p></li>
 </ol>
 </section>
 <section id="buenas-practicas">
 <h2>Buenas practicas<a class="headerlink" href="#buenas-practicas" title="Link to this heading"></a></h2>
 <ul class="simple">
-<li><p>Fijar semillas cuando se requiera reproducibilidad.</p></li>
-<li><p>Evitar mezclar resultados de experimentos con parametros distintos en una misma sesion.</p></li>
-<li><p>Exportar figuras finales a <code class="docutils literal notranslate"><span class="pre">results/</span></code> con nombres descriptivos.</p></li>
+<li><p>Fijar semillas para reproducibilidad.</p></li>
+<li><p>No mezclar en una misma sesion experimentos de base y v2 sin reiniciar kernel.</p></li>
+<li><p>Registrar en markdown del notebook los parametros exactos de corrida.</p></li>
+<li><p>Exportar resultados finales con nombres trazables por experimento y tamano de red.</p></li>
 </ul>
 </section>
 </section>
