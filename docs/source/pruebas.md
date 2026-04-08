@@ -1,22 +1,43 @@
 # tests - Estrategia de validacion
 
-Este directorio contiene pruebas unitarias y de consistencia para los componentes criticos del modelo.
+La carpeta `tests/` combina pruebas del nucleo estable con pruebas de lineas experimentales.
 
-## Archivos de prueba
+## Archivos de prueba actuales
 
 - `test_utils.py`: robustez numerica (`_safe_exp`, `_finite_or_zero`).
-- `test_lattice.py`: geometria SOS, contorno periodico y reglas de migracion.
-- `test_bkl.py`: consistencia de logica BKL, clasificacion y balance de masa.
-- `tests_suite.py`: suite integrada de pruebas.
+- `test_lattice.py`: geometria SOS, PBC y reglas de migracion.
+- `test_bkl.py`: consistencia del motor BKL base (tasas, bins, balance de masa).
+- `tests_suite.py`: suite agregada para ejecucion integral.
+- `test_adsorption_probability_analysis.py`: pruebas de analisis de probabilidad de adsorcion y sigma fijo.
+- `test_paper_kmc.py`: pruebas para una API `paper_kmc` (cara 110/101 y regimenes).
 
-## Cobertura funcional esperada
+## Alcance cubierto
 
-- Estabilidad numerica en tasas y exponenciales.
-- Integridad geometrica de la red.
-- Conservacion y consistencia de estados en eventos estocasticos.
+- Estabilidad numerica de utilidades criticas.
+- Integridad geometrica de la red SOS.
+- Consistencia de seleccion de eventos y conservacion de materia en BKL.
+- Comportamiento en escenarios con `fixed_sigma`.
+
+## Estado importante de compatibilidad
+
+En el estado actual de `src/`, no existen `analysis.py` ni `paper_kmc.py`.
+
+Por ello:
+
+- `test_adsorption_probability_analysis.py` y `test_paper_kmc.py` requieren completar/ajustar implementaciones antes de formar parte de la bateria estable de CI.
+
+## Ejecucion recomendada
+
+Para correr solo el nucleo estable:
+
+- `python -m unittest tests.test_utils tests.test_lattice tests.test_bkl`
+
+Para ejecutar todo el directorio y detectar faltantes de integracion:
+
+- `python -m unittest discover -s tests -p "test_*.py"`
 
 ## Criterios minimos antes de publicar documentacion
 
-- Sin fallos en pruebas unitarias.
-- Sin errores de import en modulos de `src/`.
+- Sin fallos en pruebas estables del nucleo.
+- Sin errores de import en modulos documentados de `src/`.
 - Sin warnings criticos al construir Sphinx en modo estricto.
