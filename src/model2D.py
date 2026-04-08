@@ -1,7 +1,10 @@
 import numpy as np
 import random
 from dataclasses import dataclass
-from utils import EMPTY, HEMIN, STEP, VECINOS, in_bounds, count_bonds, count_bonds_all, is_step_site, arrhenius
+try:
+    from .utils import EMPTY, HEMIN, STEP, VECINOS, in_bounds, count_bonds, count_bonds_all, is_step_site, arrhenius
+except ImportError:  # pragma: no cover - compatibility with legacy script-style imports
+    from utils import EMPTY, HEMIN, STEP, VECINOS, in_bounds, count_bonds, count_bonds_all, is_step_site, arrhenius
 
 #Considerando stepkink
 class Params2D:
