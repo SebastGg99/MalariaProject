@@ -111,8 +111,9 @@
 <ul class="simple">
 <li><p>Termicos/cineticos: <code class="docutils literal notranslate"><span class="pre">T</span></code>, <code class="docutils literal notranslate"><span class="pre">K0_plus</span></code>, <code class="docutils literal notranslate"><span class="pre">K_inc_plus</span></code>.</p></li>
 <li><p>Energeticos: <code class="docutils literal notranslate"><span class="pre">E_pb_over_kT</span></code>, <code class="docutils literal notranslate"><span class="pre">phi_over_kT</span></code>, <code class="docutils literal notranslate"><span class="pre">delta</span></code>.</p></li>
-<li><p>Termodinamicos: <code class="docutils literal notranslate"><span class="pre">V</span></code>, <code class="docutils literal notranslate"><span class="pre">C_eq</span></code>.</p></li>
-<li><p>Control numerico: <code class="docutils literal notranslate"><span class="pre">fixed_sigma</span></code>, <code class="docutils literal notranslate"><span class="pre">S_floor</span></code>, <code class="docutils literal notranslate"><span class="pre">S_ceil</span></code>.</p></li>
+<li><p>Termodinamicos para deplecion dinamica: <code class="docutils literal notranslate"><span class="pre">V</span></code>, <code class="docutils literal notranslate"><span class="pre">C_eq</span></code>.</p></li>
+<li><p>Control numerico: <code class="docutils literal notranslate"><span class="pre">S_floor</span></code>, <code class="docutils literal notranslate"><span class="pre">S_ceil</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fixed_sigma</span></code> permanece en la API por compatibilidad, pero la linea base se documenta y valida en modo dinamico.</p></li>
 </ul>
 </section>
 <section id="lattice-py">
@@ -132,11 +133,10 @@
 <p>Responsabilidades:</p>
 <ul class="simple">
 <li><p>Tasas <code class="docutils literal notranslate"><span class="pre">r_a</span></code>, <code class="docutils literal notranslate"><span class="pre">r_d</span></code>, <code class="docutils literal notranslate"><span class="pre">r_m</span></code>, <code class="docutils literal notranslate"><span class="pre">r_inc</span></code> con defensas numericas.</p></li>
-<li><p>Soporte de sobresaturacion dinamica o fija (<code class="docutils literal notranslate"><span class="pre">fixed_sigma</span></code>).</p></li>
+<li><p>Sobresaturacion dinamica por deplecion de reservorio (<code class="docutils literal notranslate"><span class="pre">N_bulk</span></code>) en el flujo base.</p></li>
 <li><p>Clasificacion de sitios por coordinacion local.</p></li>
 <li><p>Seleccion de eventos tipo n-fold way.</p></li>
 <li><p>Integridad en modo debug y seguimiento de conversion/historial.</p></li>
-<li><p>Probabilidades de adsorcion por clase (<code class="docutils literal notranslate"><span class="pre">_adsorption_probabilities_3class</span></code>).</p></li>
 </ul>
 </section>
 <section id="plotter-py">
@@ -156,7 +156,7 @@
 <p>Incluye:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">KMCParams_v2</span></code> (parametros adimensionales/efectivos).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">LysozymeParams_v2</span></code> con factorias para caras <code class="docutils literal notranslate"><span class="pre">face_110</span></code>, <code class="docutils literal notranslate"><span class="pre">face_101</span></code> y <code class="docutils literal notranslate"><span class="pre">custom</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fixed_sigma</span></code> opcional (sigma del paper) y propiedad <code class="docutils literal notranslate"><span class="pre">T</span></code> de solo lectura para compatibilidad de visualizacion.</p></li>
 </ul>
 </section>
 <section id="lattice-v2-py">
@@ -176,8 +176,10 @@
 <ul class="simple">
 <li><p>Entrada fisica en sigma: $\sigma = C/C_{eq} - 1$.</p></li>
 <li><p>Variable interna para tasas: $S = \ln(1+\sigma)$.</p></li>
-<li><p>Modo de concentracion constante o reservorio dinamico.</p></li>
+<li><p>Opcion de sobresaturacion fija via <code class="docutils literal notranslate"><span class="pre">fixed_sigma</span></code>.</p></li>
+<li><p>Si <code class="docutils literal notranslate"><span class="pre">fixed_sigma</span></code> no se usa, modo de concentracion constante o reservorio dinamico.</p></li>
 <li><p>Registro de observables (<code class="docutils literal notranslate"><span class="pre">height_history</span></code>, <code class="docutils literal notranslate"><span class="pre">adsorption_probs_history</span></code>).</p></li>
+<li><p>Probabilidades de adsorcion por clase (<code class="docutils literal notranslate"><span class="pre">_adsorption_probabilities_3class</span></code>).</p></li>
 </ul>
 <p>Incluye variantes:</p>
 <ul class="simple">

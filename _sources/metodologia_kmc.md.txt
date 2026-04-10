@@ -10,8 +10,9 @@ Define `KMCParams` como contenedor de parametros del motor base:
 
 - Termicos/cineticos: `T`, `K0_plus`, `K_inc_plus`.
 - Energeticos: `E_pb_over_kT`, `phi_over_kT`, `delta`.
-- Termodinamicos: `V`, `C_eq`.
-- Control numerico: `fixed_sigma`, `S_floor`, `S_ceil`.
+- Termodinamicos para deplecion dinamica: `V`, `C_eq`.
+- Control numerico: `S_floor`, `S_ceil`.
+- `fixed_sigma` permanece en la API por compatibilidad, pero la linea base se documenta y valida en modo dinamico.
 
 ### lattice.py
 
@@ -31,11 +32,10 @@ Define `KMC_BKL` y las variantes `SelectiveKMC` y `KMC_NoDesNoMig`.
 Responsabilidades:
 
 - Tasas `r_a`, `r_d`, `r_m`, `r_inc` con defensas numericas.
-- Soporte de sobresaturacion dinamica o fija (`fixed_sigma`).
+- Sobresaturacion dinamica por deplecion de reservorio (`N_bulk`) en el flujo base.
 - Clasificacion de sitios por coordinacion local.
 - Seleccion de eventos tipo n-fold way.
 - Integridad en modo debug y seguimiento de conversion/historial.
-- Probabilidades de adsorcion por clase (`_adsorption_probabilities_3class`).
 
 ### plotter.py
 
@@ -52,7 +52,7 @@ Responsabilidades:
 Incluye:
 
 - `KMCParams_v2` (parametros adimensionales/efectivos).
-- `LysozymeParams_v2` con factorias para caras `face_110`, `face_101` y `custom`.
+- `fixed_sigma` opcional (sigma del paper) y propiedad `T` de solo lectura para compatibilidad de visualizacion.
 
 ### lattice_v2.py
 
@@ -71,8 +71,10 @@ Tambien incorpora metricas auxiliares como `mean_height`, `roughness` y `step_de
 
 - Entrada fisica en sigma: $\sigma = C/C_{eq} - 1$.
 - Variable interna para tasas: $S = \ln(1+\sigma)$.
-- Modo de concentracion constante o reservorio dinamico.
+- Opcion de sobresaturacion fija via `fixed_sigma`.
+- Si `fixed_sigma` no se usa, modo de concentracion constante o reservorio dinamico.
 - Registro de observables (`height_history`, `adsorption_probs_history`).
+- Probabilidades de adsorcion por clase (`_adsorption_probabilities_3class`).
 
 Incluye variantes:
 
