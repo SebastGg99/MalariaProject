@@ -1,32 +1,29 @@
 # data - Convenciones de datos
 
-Este directorio esta reservado para datos de entrada del proyecto.
+La carpeta `data/` esta reservada para datasets de entrada curados del proyecto.
 
 ## Estado actual
 
-Actualmente no hay datasets versionados en esta carpeta.
+- `data/` se encuentra vacia (solo estructura de directorio).
+- Existen datos de referencia usados en notebooks dentro de `notebooks/` (por ejemplo `beta-hematina.txt`).
 
-## Que tipos de datos van aqui
+## Que tipos de datos deben ir en `data/`
 
 - Tablas experimentales de referencia.
-- Series temporales para validacion.
+- Series temporales de validacion.
 - Insumos para calibracion de parametros.
 
 ## Reglas de formato recomendadas
 
 - Preferir CSV o TXT tabular con encabezados claros.
 - Incluir unidades en nombres de columnas cuando aplique.
-- Evitar archivos binarios sin documentacion asociada.
+- Evitar binarios sin descripcion o sin script consumidor asociado.
 
-## Trazabilidad
+## Trazabilidad minima por dataset
 
-Para cada dataset nuevo, documentar:
+Para cada dataset nuevo, registrar en documentacion:
 
 - Fuente.
-- Fecha.
+- Fecha de descarga/generacion.
 - Preprocesamiento aplicado.
-- Script o notebook que lo consume.
-
-## Notas para Sphinx
-
-Este README debe enlazarse desde la seccion de uso o metodologia para mantener trazabilidad de insumos.
+- Notebook o script que lo consume.

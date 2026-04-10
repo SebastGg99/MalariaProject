@@ -22,7 +22,9 @@
         <script src="_static/translations.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Índice" href="genindex.html" />
-    <link rel="search" title="Búsqueda" href="search.html" /> 
+    <link rel="search" title="Búsqueda" href="search.html" />
+    <link rel="next" title="tests - Estrategia de validacion" href="pruebas.html" />
+    <link rel="prev" title="notebooks - Guia de experimentos reproducibles" href="notebooks.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -33,8 +35,9 @@
 
           
           
-          <a href="index.html" class="icon icon-home">
-            MalariaProject - Crystal Growth with kMC method
+          <a href="index.html">
+            
+              <img src="_static/logo.png" class="logo" alt="Logotipo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -44,17 +47,26 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <!-- Local TOC -->
-              <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">results - Artefactos de salida</a><ul>
-<li><a class="reference internal" href="#estado-actual">Estado actual</a></li>
-<li><a class="reference internal" href="#convencion-recomendada-de-nombres">Convencion recomendada de nombres</a></li>
-<li><a class="reference internal" href="#que-versionar-en-git">Que versionar en git</a></li>
-<li><a class="reference internal" href="#notas-para-sphinx">Notas para Sphinx</a></li>
+              <p class="caption" role="heading"><span class="caption-text">Contenidos:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduccion.html">MalariaProject</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metodologia_kmc.html">src - Documentacion tecnica del nucleo kMC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="datos.html">data - Convenciones de datos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks.html">notebooks - Guia de experimentos reproducibles</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">results - Artefactos de salida</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#estado-actual-artefactos-observados">Estado actual (artefactos observados)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#gif-de-crecimiento">GIF de crecimiento</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#graficas-de-probabilidad-de-adsorcion">Graficas de probabilidad de adsorcion</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#lectura-tecnica-de-los-resultados">Lectura tecnica de los resultados</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#convencion-recomendada-de-nombres">Convencion recomendada de nombres</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#politica-de-versionado">Politica de versionado</a></li>
 </ul>
-</div>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pruebas.html">tests - Estrategia de validacion</a></li>
+</ul>
+
         </div>
       </div>
     </nav>
@@ -81,40 +93,66 @@
              
   <section id="results-artefactos-de-salida">
 <h1>results - Artefactos de salida<a class="headerlink" href="#results-artefactos-de-salida" title="Enlace permanente a este encabezado"></a></h1>
-<p>Este directorio contiene resultados generados por simulaciones y analisis.</p>
-<section id="estado-actual">
-<h2>Estado actual<a class="headerlink" href="#estado-actual" title="Enlace permanente a este encabezado"></a></h2>
-<p>Se observan animaciones GIF de crecimiento cristalino para distintos escenarios:</p>
+<p>Este directorio concentra salidas graficas generadas por simulaciones y notebooks.</p>
+<section id="estado-actual-artefactos-observados">
+<h2>Estado actual (artefactos observados)<a class="headerlink" href="#estado-actual-artefactos-observados" title="Enlace permanente a este encabezado"></a></h2>
+<section id="gif-de-crecimiento">
+<h3>GIF de crecimiento<a class="headerlink" href="#gif-de-crecimiento" title="Enlace permanente a este encabezado"></a></h3>
 <ul class="simple">
-<li><p>Sin desorcion.</p></li>
-<li><p>Sin desorcion ni migracion.</p></li>
-<li><p>Sin migracion.</p></li>
-<li><p>Caso de sobresaturacion fija.</p></li>
-<li><p>Escalado por tamano de red.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">crystal_growth.gif</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">crystal_growth_75.gif</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">crystal_growth_NoDes.gif</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">crystal_growth_NoDesNoMig.gif</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">crystal_growth_NoMig.gif</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">crystal_growth_S2.gif</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">crystal_growth_S2_1.gif</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">crystal_growth_[20,</span> <span class="pre">20].gif</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">crystal_growth_[30,</span> <span class="pre">30].gif</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">crystal_growth_[50,</span> <span class="pre">50].gif</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">crystal_growth_[100,</span> <span class="pre">100].gif</span></code></p></li>
+</ul>
+</section>
+<section id="graficas-de-probabilidad-de-adsorcion">
+<h3>Graficas de probabilidad de adsorcion<a class="headerlink" href="#graficas-de-probabilidad-de-adsorcion" title="Enlace permanente a este encabezado"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">adsorption_probabilities_vs_sigma_1.png</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">adsorption_probabilities_vs_sigma_2.png</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">adsorption_probabilities_vs_sigma_3.png</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">adsorption_probabilities_vs_sigma_5.png</span></code></p></li>
+</ul>
+</section>
+</section>
+<section id="lectura-tecnica-de-los-resultados">
+<h2>Lectura tecnica de los resultados<a class="headerlink" href="#lectura-tecnica-de-los-resultados" title="Enlace permanente a este encabezado"></a></h2>
+<ul class="simple">
+<li><p>Los archivos <code class="docutils literal notranslate"><span class="pre">NoDes</span></code>, <code class="docutils literal notranslate"><span class="pre">NoMig</span></code> y <code class="docutils literal notranslate"><span class="pre">NoDesNoMig</span></code> corresponden a variantes con procesos desactivados.</p></li>
+<li><p>Los archivos con sufijo <code class="docutils literal notranslate"><span class="pre">[Lx,</span> <span class="pre">Ly]</span></code> corresponden a pruebas de escalado por tamano de red.</p></li>
+<li><p>Los PNG de probabilidad resumen barridos de sigma y clases de sitio de adsorcion.</p></li>
 </ul>
 </section>
 <section id="convencion-recomendada-de-nombres">
 <h2>Convencion recomendada de nombres<a class="headerlink" href="#convencion-recomendada-de-nombres" title="Enlace permanente a este encabezado"></a></h2>
-<p>Usar nombres con esta estructura:</p>
+<p>Usar una estructura trazable por experimento:</p>
 <p><code class="docutils literal notranslate"><span class="pre">&lt;experimento&gt;__LxLy__sigma__seed__fecha.ext</span></code></p>
 <p>Ejemplo:</p>
 <p><code class="docutils literal notranslate"><span class="pre">growth_face101__30x30__sigma2.0__seed42__2026-03-10.gif</span></code></p>
 </section>
-<section id="que-versionar-en-git">
-<h2>Que versionar en git<a class="headerlink" href="#que-versionar-en-git" title="Enlace permanente a este encabezado"></a></h2>
-<p>Versionar resultados finales que soporten reportes o publicaciones.
-No versionar salidas intermedias voluminosas o temporales.</p>
-</section>
-<section id="notas-para-sphinx">
-<h2>Notas para Sphinx<a class="headerlink" href="#notas-para-sphinx" title="Enlace permanente a este encabezado"></a></h2>
-<p>Este README puede citarse en la documentacion de uso para explicar donde encontrar resultados y como interpretarlos.</p>
+<section id="politica-de-versionado">
+<h2>Politica de versionado<a class="headerlink" href="#politica-de-versionado" title="Enlace permanente a este encabezado"></a></h2>
+<ul class="simple">
+<li><p>Versionar resultados finales que respalden reportes, figuras de paper o validaciones clave.</p></li>
+<li><p>Evitar versionar salidas intermedias voluminosas cuando no aporten evidencia adicional.</p></li>
+</ul>
 </section>
 </section>
 
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pie de página">
+        <a href="notebooks.html" class="btn btn-neutral float-left" title="notebooks - Guia de experimentos reproducibles" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Anterior</a>
+        <a href="pruebas.html" class="btn btn-neutral float-right" title="tests - Estrategia de validacion" accesskey="n" rel="next">Siguiente <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 
