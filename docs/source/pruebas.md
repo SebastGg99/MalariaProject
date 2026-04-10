@@ -16,7 +16,7 @@ La carpeta `tests/` combina pruebas del nucleo estable con pruebas de lineas exp
 - Estabilidad numerica de utilidades criticas.
 - Integridad geometrica de la red SOS.
 - Consistencia de seleccion de eventos y conservacion de materia en BKL.
-- Comportamiento en escenarios con `fixed_sigma`.
+- Comportamiento del nucleo base con sobresaturacion dinamica (deplecion de reservorio).
 
 ## Estado importante de compatibilidad
 
@@ -25,6 +25,7 @@ En el estado actual de `src/`, no existen `analysis.py` ni `paper_kmc.py`.
 Por ello:
 
 - `test_adsorption_probability_analysis.py` y `test_paper_kmc.py` requieren completar/ajustar implementaciones antes de formar parte de la bateria estable de CI.
+- Los escenarios de sigma fijo se consideran cobertura experimental hasta cerrar esa integracion.
 
 ## Ejecucion recomendada
 

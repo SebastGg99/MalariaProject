@@ -34,67 +34,67 @@ class KMCParams_v2:
         return _DISPLAY_TEMPERATURE_K
 
 
-class LysozymeParams_v2:
-    """
-    Factorías de parámetros para lisozima HEW tetragonal calibrados a partir
-    del artículo de Nagpal et al. (2024).
-    """
+# class LysozymeParams_v2:
+#     """
+#     Factorías de parámetros para lisozima HEW tetragonal calibrados a partir
+#     del artículo de Nagpal et al. (2024).
+#     """
 
-    @staticmethod
-    def face_110(
-        C_eq: float = 15.0,
-        K0_plus: float = 0.211,
-        fixed_sigma: Optional[float] = None,
-    ) -> KMCParams_v2:
-        return KMCParams_v2(
-            K0_plus=K0_plus,
-            E_pb_over_kT=0.48,
-            phi_over_kT=3.76,
-            delta=0.63,
-            V=1.0,
-            C_eq=C_eq,
-            fixed_sigma=fixed_sigma,
-            S_floor=-2.0,
-            S_ceil=8.0,
-        )
+#     @staticmethod
+#     def face_110(
+#         C_eq: float = 15.0,
+#         K0_plus: float = 0.211,
+#         fixed_sigma: Optional[float] = None,
+#     ) -> KMCParams_v2:
+#         return KMCParams_v2(
+#             K0_plus=K0_plus,
+#             E_pb_over_kT=0.48,
+#             phi_over_kT=3.76,
+#             delta=0.63,
+#             V=1.0,
+#             C_eq=C_eq,
+#             fixed_sigma=fixed_sigma,
+#             S_floor=-2.0,
+#             S_ceil=8.0,
+#         )
 
-    @staticmethod
-    def face_101(
-        C_eq: float = 15.0,
-        K0_plus: float = 0.211,
-        fixed_sigma: Optional[float] = None,
-    ) -> KMCParams_v2:
-        return KMCParams_v2(
-            K0_plus=K0_plus,
-            E_pb_over_kT=2.12,
-            phi_over_kT=4.27,
-            delta=0.30,
-            V=1.0,
-            C_eq=C_eq,
-            fixed_sigma=fixed_sigma,
-            S_floor=-2.0,
-            S_ceil=8.0,
-        )
+#     @staticmethod
+#     def face_101(
+#         C_eq: float = 15.0,
+#         K0_plus: float = 0.211,
+#         fixed_sigma: Optional[float] = None,
+#     ) -> KMCParams_v2:
+#         return KMCParams_v2(
+#             K0_plus=K0_plus,
+#             E_pb_over_kT=2.12,
+#             phi_over_kT=4.27,
+#             delta=0.30,
+#             V=1.0,
+#             C_eq=C_eq,
+#             fixed_sigma=fixed_sigma,
+#             S_floor=-2.0,
+#             S_ceil=8.0,
+#         )
 
-    @staticmethod
-    def custom(
-        E_pb: float,
-        phi: float,
-        delta: float,
-        C_eq: float = 15.0,
-        K0_plus: float = 0.211,
-        fixed_sigma: Optional[float] = None,
-        S_floor: float = -5.0,
-        S_ceil: float = 10.0,
-    ) -> KMCParams_v2:
-        return KMCParams_v2(
-            K0_plus=K0_plus,
-            E_pb_over_kT=E_pb,
-            phi_over_kT=phi,
-            delta=delta,
-            V=1.0,
-            C_eq=C_eq,
-            fixed_sigma=fixed_sigma,
-            S_floor=S_floor,
-            S_ceil=S_ceil,
-        )
+#     @staticmethod
+#     def custom(
+#         E_pb: float,
+#         phi: float,
+#         delta: float,
+#         C_eq: float = 15.0,
+#         K0_plus: float = 0.211,
+#         fixed_sigma: Optional[float] = None,
+#         S_floor: float = -5.0,
+#         S_ceil: float = 10.0,
+#     ) -> KMCParams_v2:
+#         return KMCParams_v2(
+#             K0_plus=K0_plus,
+#             E_pb_over_kT=E_pb,
+#             phi_over_kT=phi,
+#             delta=delta,
+#             V=1.0,
+#             C_eq=C_eq,
+#             fixed_sigma=fixed_sigma,
+#             S_floor=S_floor,
+#             S_ceil=S_ceil,
+#         )

@@ -7,9 +7,9 @@ MalariaProject implementa simulaciones **Kinetic Monte Carlo (kMC)** para crecim
 Actualmente el proyecto tiene dos líneas principales de modelado en `src/`:
 
 - Línea base (`params.py`, `lattice.py`, `bkl.py`, `plotter.py`).
-- Línea v2 orientada a calibración por cara cristalina (`params_v2.py`, `lattice_v2.py`, `bkl_v2.py`, `plotter_v2.py`).
+- Línea v2, orientada a reproducción de resultados de referencia principal (`params_v2.py`, `lattice_v2.py`, `bkl_v2.py`, `plotter_v2.py`).
 
-Además, se mantiene una variante alternativa de dinámica en 2D (`model2D.py`) para experimentos específicos.
+Además, se mantiene una variante alternativa de un modelo en 2D (`model2D.py`) con las mismas condiciones periódicas y el mismo algoritmo de selección de eventos.
 
 ## Actualizaciones relevantes del núcleo
 
@@ -23,9 +23,9 @@ La clase `LatticeSOS` mantiene vecindad de 4 vecinos y contorno periódico, e in
 
 ### 2. Parámetros base (`params.py`)
 
-La `dataclass` `KMCParams` incluye los parámetros cinéticos y termodinámicos del modelo clásico y añade:
+La `dataclass` `KMCParams` incluye los parámetros cinéticos y termodinámicos del modelo clásico:
 
-- `fixed_sigma` opcional para usar sobresaturación estática.
+- Variables termodinámicas de depleción (`V`, `C_eq`) para sobresaturación dinámica.
 - Clamps `S_floor` y `S_ceil` para estabilidad numérica.
 
 ### 3. Motor BKL base (`bkl.py`)
@@ -33,10 +33,9 @@ La `dataclass` `KMCParams` incluye los parámetros cinéticos y termodinámicos 
 La clase `KMC_BKL` implementa:
 
 - Tasas de adsorción, desorción, migración e incorporación con protección numérica.
-- Modo con `fixed_sigma` y modo dinámico con depleción de reservorio (`N_bulk`).
+- Sobresaturación dinámica por depleción del reservorio (`N_bulk`) en el flujo base.
 - Clasificación por coordinación local para selección rejection-free.
-- Validaciones internas en modo `debug` (consistencia de bins, tasas y chequeos termo).
-- Cálculo de probabilidades de adsorción por clase (`_adsorption_probabilities_3class`).
+- Validaciones internas en modo `debug` (consistencia de bins, tasas y chequeos termodinámicos y de consistencia física).
 
 También se mantienen variantes de control selectivo de procesos:
 
@@ -45,17 +44,23 @@ También se mantienen variantes de control selectivo de procesos:
 
 ### 4. Línea v2 (`*_v2.py`)
 
-La variante v2 introduce una formulación con foco en escenarios de lisozima:
+La variante v2 introduce una formulación alineada con el artículo de referencia principal:
 
-- `KMCParams_v2` y factorías `LysozymeParams_v2` para caras 110/101.
+- `KMCParams_v2` con parámetros adimensionales y `fixed_sigma` opcional.
 - `LatticeSOS_v2` con modos de inicialización `flat`, `random`, `seeds` y `screw`.
 - `KMC_BKL_v2` con manejo explícito de:
   - $\sigma = C/C_{eq} - 1$ (magnitud física de entrada).
   - $S = \ln(1+\sigma)$ (magnitud interna de las tasas).
-  - Modos de concentración constante y reservorio dinámico.
+  - Opción de sobresaturación fija (`fixed_sigma`).
+  - Si `fixed_sigma` no está activo, operación con concentración constante o reservorio dinámico.
 - `Plotter_v2` con visualización 3D, GIF y utilidades de análisis de velocidad/probabilidades.
 
-### 5. Utilidades y API del paquete
+### 5. Diferencia principal entre líneas
+
+- Línea base: sobresaturación diseñada para evolucionar dinámicamente con depleción de soluto.
+- Línea v2: mantiene esa posibilidad y además habilita sobresaturación fija mediante `fixed_sigma`.
+
+### 6. Utilidades y API del paquete
 
 - `utils.py` centraliza utilidades robustas (`_safe_exp`, `_finite_or_zero`) y helpers de vecindad para `model2D.py`.
 - `src/__init__.py` exporta las clases y funciones principales de ambas líneas (base y v2).
