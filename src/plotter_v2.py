@@ -79,7 +79,7 @@ class Plotter_v2:
         Lx, Ly = heights.shape
         X, Y = np.meshgrid(np.arange(Lx), np.arange(Ly), indexing="ij")
 
-        fig = plt.figure(figsize=(10, 8))
+        fig = plt.figure(figsize=(6, 6))
         ax = fig.add_subplot(111, projection='3d')
         ax.view_init(elev=elev, azim=azim)
 
