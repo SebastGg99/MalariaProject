@@ -343,7 +343,7 @@ class KMC_BKL_v2:
         self.counts[etype] += 1
         self.history.append((self.t, etype, site))
 
-        if len(self.history) % 10 == 0:
+        if len(self.history) % 1 == 0:
             self._record_observables()
 
         return True

@@ -223,7 +223,8 @@ class LatticeSOS_v2:
 
     def adsorption_bonds(self, site: Tuple[int, int]) -> int:
         h = self.get_height(site)
-        return self.lateral_neighbors_at_level(site, h + 1)
+        # return self.lateral_neighbors_at_level(site, h + 1)
+        return self.lateral_neighbors_at_level(site, h)
 
     def desorption_bonds(self, site: Tuple[int, int]) -> int:
         h = self.get_height(site)
