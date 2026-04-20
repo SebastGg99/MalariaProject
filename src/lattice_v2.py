@@ -217,12 +217,13 @@ class LatticeSOS_v2:
     def lateral_neighbors_at_level(self, site: Tuple[int, int], level: int) -> int:
         count = 0
         for n in self.neighbors4(site):
-            if self.heights[n] >= level:
+            if self.heights[n] == level:
                 count += 1
         return count
 
     def adsorption_bonds(self, site: Tuple[int, int]) -> int:
         h = self.get_height(site)
+        # return self.lateral_neighbors_at_level(site, h + 1)
         return self.lateral_neighbors_at_level(site, h + 1)
 
     def desorption_bonds(self, site: Tuple[int, int]) -> int:
