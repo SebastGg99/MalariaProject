@@ -111,6 +111,12 @@ class Plotter_v2:
                 intensity = 0.3 + 0.7 * (z / max(max_h - 1, 1))
                 colors[:, :, z, :] = [0.2 * intensity, 0.4 * intensity, 0.8, 0.9]
 
+            # Resaltar la capa superior de cada columna en verde marino
+            top_layer_color = np.array([0.0, 0.35, 0.33, 0.98])
+            ii, jj = np.where(heights > 0)
+            top_zz = heights[ii, jj].astype(int) - 1
+            colors[ii, jj, top_zz, :] = top_layer_color
+
             ax.voxels(voxels, facecolors=colors, edgecolor='black', linewidth=0.15)
             ax.set_box_aspect((Lx, Ly, max_h * 0.5))  # Z comprimido para visibilidad
 
@@ -197,6 +203,13 @@ class Plotter_v2:
                 
                 colors = np.zeros(voxels.shape + (4,), dtype=float)
                 colors[..., :] = [0.2, 0.3, 0.8, 0.85]
+
+                # Resaltar la capa superior instantánea en cada frame
+                top_layer_color = np.array([0.0, 0.35, 0.33, 0.98])
+                ii, jj = np.where(heights > 0)
+                top_zz = heights[ii, jj].astype(int) - 1
+                colors[ii, jj, top_zz, :] = top_layer_color
+
                 ax.voxels(voxels, facecolors=colors, edgecolor="black", linewidth=0.2)
                 ax.set_box_aspect((Lx, Ly, global_max_h))
 

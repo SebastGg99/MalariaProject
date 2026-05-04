@@ -5,6 +5,7 @@ from plotter import Plotter
 from params_v2 import KMCParams_v2
 from lattice_v2 import LatticeSOS_v2
 from bkl_v2 import KMC_BKL_v2
+from probabilityAnalysis import compute_probabilities, extract_probs
 from plotter_v2 import Plotter_v2
 from utils import _safe_exp, _finite_or_zero
 
@@ -18,6 +19,8 @@ __all__ = ['KMCParams',
         #    'LysozymeParams_v2',
            'LatticeSOS_v2',
            'KMC_BKL_v2',
+           'compute_probabilities',
+           'extract_probs',
            'Plotter_v2',
            '_safe_exp',
            '_finite_or_zero'

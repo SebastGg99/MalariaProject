@@ -221,22 +221,22 @@ class KMC_BKL_v2:
 
     def _adsorption_probabilities_3class(self) -> Dict[int, float]:
         A_bins = self._classify_adsorption_sites()
-        #rates_a = {i: self.r_a(i) for i in range(3)}
-        rates_a = {i: self.r_a(i) for i in range(5)}
-        Wa = sum(len(A_bins[i]) * rates_a[i] for i in range(5))
-        #Wa = sum(len(A_bins[i]) * rates_a[i] for i in range(3))
+        rates_a = {i: self.r_a(i) for i in range(3)}
+        #rates_a = {i: self.r_a(i) for i in range(5)}
+        #Wa = sum(len(A_bins[i]) * rates_a[i] for i in range(5))
+        Wa = sum(len(A_bins[i]) * rates_a[i] for i in range(3))
 
         if Wa <= 0.0:
             return {0: 0.0, 1: 0.0, 2: 0.0}
 
-        probs_raw = {i: (len(A_bins[i]) * rates_a[i]) / Wa for i in range(5)}
-        #probs_raw = {i: (len(A_bins[i]) * rates_a[i]) / Wa for i in range(3)}
+        #probs_raw = {i: (len(A_bins[i]) * rates_a[i]) / Wa for i in range(5)}
+        probs_raw = {i: (len(A_bins[i]) * rates_a[i]) / Wa for i in range(3)}
 
         probs_merged = {
             0: probs_raw.get(0, 0.0),
             1: probs_raw.get(1, 0.0),
-            2: sum(probs_raw.get(i, 0.0) for i in (2, 3, 4)),
-            #2: probs_raw.get(2, 0.0),
+            #2: sum(probs_raw.get(i, 0.0) for i in (2, 3, 4)),
+            2: probs_raw.get(2, 0.0),
         }
         total_prob = sum(probs_merged.values())
         if total_prob > 0.0:

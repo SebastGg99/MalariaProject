@@ -20,6 +20,28 @@ def _finite_or_zero(x: float) -> float:
     """Devuelve x si es finito; 0.0 en caso contrario."""
     return float(x) if np.isfinite(x) else 0.0
 
+# Comentario: datos experimentales aproximados leídos de la figura objetivo.
+FACE_DATA = {
+    "110": {
+        "delta": 0.63,
+        "E_pb_over_kT": 0.48,
+        "phi_over_kT": 3.76,
+        "exp_sigma": np.array([1.0, 4.0, 4.0, 6.0, 6.0, 6.0, 8.0], dtype=float),
+        "exp_rate": np.array([0.00, 0.10, 0.17, 0.21, 0.28, 0.35, 0.42], dtype=float),
+        "title": "(a) Cara 110",
+        "marker": "+",
+    },
+    "101": {
+        "delta": 0.30,
+        "E_pb_over_kT": 2.12,
+        "phi_over_kT": 4.27,
+        "exp_sigma": np.array([1.0, 2.0, 4.0, 4.0, 6.0, 6.0, 6.0, 8.0], dtype=float),
+        "exp_rate": np.array([0.00, 0.00, 0.09, 0.10, 0.17, 0.21, 0.28, 0.42], dtype=float),
+        "title": "(b) Cara 101",
+        "marker": "*",
+    },
+}
+
 def in_bounds(i, j, Lx, Ly):
     """Verifica si (i,j) está dentro de la grilla"""
     return (0 <= i < Lx) and (0 <= j < Ly)
