@@ -50,19 +50,19 @@ class Params2D:
     Eac : float
         Barrera base de difusion en la direccion c (eV).
     Jad : float
-        Correccion por vecino para adsorcion (eV por vecino).
+        Correccion por vecino para adsorcion (interacción lateral).
     Jinc : float
-        Correccion por vecino para incorporacion (eV por vecino).
+        Correccion por vecino para incorporacion (interacción lateral).
     Jdes : float
-        Correccion por vecino para desorcion (eV por vecino).
+        Correccion por vecino para desorcion (interacción lateral).
     Jmove : float
-        Correccion por vecino para difusion (eV por vecino).
+        Correccion por vecino para difusion (interacción lateral).
     mu : float
         Potencial quimico efectivo del bano.
 
     Notas
     -----
-    - Los tamanos de red y constantes fisicas se fijan como atributos internos.
+    - Los tamaños de red y constantes fisicas se fijan como atributos internos.
     - Las banderas enable_* permiten activar o desactivar procesos.
     """
     Ead: float = 0.25
@@ -99,7 +99,7 @@ class Params2D:
     face_bias: float = field(init=False, default=1.0)
     enable_ads: bool = field(init=False, default=True)
     enable_des: bool = field(init=False, default=True)
-    enable_diff: bool = field(init=False, default=False)
+    enable_diff: bool = field(init=False, default=True)
     enable_incorp: bool = field(init=False, default=True)
 
     def __post_init__(self):

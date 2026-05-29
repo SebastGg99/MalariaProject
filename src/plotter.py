@@ -234,7 +234,8 @@ class Plotter:
         conversions = [conv for _, _, conv in snapshots]
 
         plt.figure(figsize=figsize)
-        plt.plot(times, conversions, marker='o', linestyle='-', color='blue')
+        # plt.plot(times, conversions, marker='o', linestyle='-', color='blue')
+        plt.plot(times, conversions, linestyle='-', color='blue')
         plt.xlabel("Tiempo")
         plt.ylabel("Conversión (%)")
         plt.title(title)
